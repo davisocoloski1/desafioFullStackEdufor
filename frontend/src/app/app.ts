@@ -1,14 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SearchBar } from "./components/search-bar/search-bar";
-import { AddBook } from "./components/add-book/add-book";
+import { Home } from "./components/home/home";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SearchBar, AddBook],
+  imports: [RouterOutlet, Home],
+  standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('angular20Tutorial');
+  protected readonly title = signal('frontend');
 }

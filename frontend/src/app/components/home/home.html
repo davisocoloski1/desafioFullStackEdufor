@@ -1,0 +1,21 @@
+<main>
+  <header>
+    <a routerLink="/login">Login/Registro</a>
+    <a routerLink="/public_books">Listagem de Livros</a>
+  </header>
+  <body>
+    <app-search-book></app-search-book>
+    <app-add-book-btn></app-add-book-btn>
+
+    <div class="createBook">
+      <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
+      <input type="text" [formControl]="autor" [placeholder]="autorPlaceholder" class="input">
+      <input type="text" [formControl]="ano" [placeholder]="anoPlaceholder" class="input">
+      <input type="text" [formControl]="genero" [placeholder]="generoPlaceholder" class="input">
+      <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
+
+      <button (click)="limpar()">Limpar Campos</button>
+    </div>
+
+  </body>
+</main>

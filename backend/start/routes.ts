@@ -1,12 +1,3 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js';
 
@@ -24,4 +15,6 @@ router.group(() => {
   router.put(':id/deletar', [() => import('#controllers/livros_controller'), 'destroy'])
 
   router.put(':id/editar', [() => import('#controllers/livros_controller'), 'update'])
+
+  router.get('exibirLivros', [() => import('#controllers/livros_controller'), 'index'])
 }).prefix('api/v1/livros').use(middleware.auth())

@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from "#models/user"
+import { schema, rules } from "@adonisjs/validator"
 
 export default class UsersController {
     async login({request, response}: HttpContext) {
@@ -39,12 +40,23 @@ export default class UsersController {
         })
     }
 
-    async store({ request }: HttpContext) {
-        const { username, email, password } = request.all()
-        const newUser = await User.create({
-            username, email, password
+    async store({ request, response }: HttpContext) {
+        const userSchema = schema.create({
+            username: schema.string({}, [
+                rules.minLength(3),
+                rules.maxLength(20),
+            ]),
+            email: schema.string({}, [rules.email()]),
+            password: schema.string({}, [
+                rules.minLength(6),
+                rules.maxLength(20),
+                rules.confirmed(),
+            ])
         })
 
-        return newUser;
+        const data = await request.validate({ schema: userSchema })
+        const user = await User.create(data)
+
+        return response.created(user);
     }
 }
