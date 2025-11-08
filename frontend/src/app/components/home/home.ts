@@ -2,17 +2,21 @@ import { Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { SearchBook } from "../search-book/search-book";
 import { AddBookBtn } from "../add-book-btn/add-book-btn";
+import { ActionsSelect } from '../actions-select/actions-select';
 import { FormControl, ReactiveFormsModule  } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SearchBook, AddBookBtn, ReactiveFormsModule],
+  imports: [RouterLink, SearchBook, AddBookBtn, ActionsSelect, ReactiveFormsModule],
   templateUrl: './home.html',
    standalone: true,
   styleUrl: './home.scss',
 })
 
 export class Home {
+  selected: string = 'Adicionar'
+  isDelete: boolean = false
+
   titlePlaceholder = "Título"
   autorPlaceholder = "Autor"
   anoPlaceholder = "Ano de lançamento"

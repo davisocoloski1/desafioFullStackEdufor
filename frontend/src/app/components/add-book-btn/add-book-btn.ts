@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-add-book-btn',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './add-book-btn.scss',
 })
 export class AddBookBtn {
-
+  @Input() text = 'Adicionar';
 }

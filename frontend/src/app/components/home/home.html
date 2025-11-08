@@ -4,18 +4,28 @@
     <a routerLink="/public_books">Listagem de Livros</a>
   </header>
   <body>
-    <app-search-book></app-search-book>
-    <app-add-book-btn></app-add-book-btn>
 
-    <div class="createBook">
+    <app-search-book></app-search-book>
+    <div class="actions-row">
+      <app-actions-select (optionChanged)="selected = $event" (isDelete)="isDelete = $event"></app-actions-select>
+      <app-add-book-btn [text]="selected"></app-add-book-btn>
+      <button (click)="limpar()">Limpar Campos</button>
+    </div>
+
+
+    @if (isDelete) {
+      <div class="bookManagement">
+        <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
+      </div>
+    } @else {
+    <div class="bookManagement">
       <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
       <input type="text" [formControl]="autor" [placeholder]="autorPlaceholder" class="input">
       <input type="text" [formControl]="ano" [placeholder]="anoPlaceholder" class="input">
       <input type="text" [formControl]="genero" [placeholder]="generoPlaceholder" class="input">
       <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
 
-      <button (click)="limpar()">Limpar Campos</button>
     </div>
-
+    }
   </body>
 </main>
