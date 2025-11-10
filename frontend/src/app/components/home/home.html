@@ -1,6 +1,7 @@
 <main>
   <header>
-    <a routerLink="/login">Login/Registro</a>
+    <a routerLink="/login">Login</a>
+    <a routerLink="/signin">Registro</a>
     <a routerLink="/public_books">Listagem de Livros</a>
   </header>
   <body>
@@ -8,17 +9,18 @@
     <app-search-book></app-search-book>
     <div class="actions-row">
       <app-actions-select (optionChanged)="selected = $event" (isDelete)="isDelete = $event"></app-actions-select>
-      <app-add-book-btn [text]="selected"></app-add-book-btn>
+      <app-add-book-btn [text]="selected" (click)="checkNullValues()" (click)="bookMenuAction()"></app-add-book-btn>
       <button (click)="limpar()">Limpar Campos</button>
     </div>
 
 
-    @if (isDelete) {
+    @if (selected === 'Deletar') {
       <div class="bookManagement">
-        <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
+        <input type="text" [formControl]="bookId" placeholder="ID do seu livro" class="input">
       </div>
-    } @else {
+    } @else if (selected === 'Editar') {
     <div class="bookManagement">
+      <input type="text" [formControl]="bookId" placeholder="ID do seu livro" class="input">
       <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
       <input type="text" [formControl]="autor" [placeholder]="autorPlaceholder" class="input">
       <input type="text" [formControl]="ano" [placeholder]="anoPlaceholder" class="input">
@@ -26,6 +28,16 @@
       <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
 
     </div>
+    } @else {
+      <div class="bookManagement">
+        <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
+        <input type="text" [formControl]="autor" [placeholder]="autorPlaceholder" class="input">
+        <input type="text" [formControl]="ano" [placeholder]="anoPlaceholder" class="input">
+        <input type="text" [formControl]="genero" [placeholder]="generoPlaceholder" class="input">
+        <input type="text" [formControl]="isbn" [placeholder]="isbnPlaceholder" class="input">
+      </div>
     }
+
+    <app-books-index></app-books-index>
   </body>
 </main>

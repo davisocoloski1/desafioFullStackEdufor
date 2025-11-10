@@ -1,0 +1,19 @@
+<body>
+  <header>
+    <a routerLink="">Menu</a>
+    <a routerLink="/login">Login</a>
+    <a routerLink="/public_books">Listagem de Livros</a>
+  </header>
+
+  <main>
+    <div class="login">
+      <input type="text" [formControl]="usernameInput" placeholder="Username" id="login_input">
+      <input type="text" [formControl]="emailInput" placeholder="E-mail" id="login_input">
+      <input type="text" [formControl]="passwordInput" placeholder="Senha" id="login_input">
+      <!-- <input type="text" [formControl]="passwordConfirmationInput" placeholder="Confirme sua senha" id="login_input"> -->
+      
+      <button (click)="registrarUser()">Registrar</button>
+      <button routerLink="/login">Entrar em uma conta</button>
+    </div>
+  </main>
+</body>
