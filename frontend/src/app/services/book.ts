@@ -30,4 +30,8 @@ export class Book {
   exibirLivros(): Observable<any> {
     return this.http.get(`${this.url}/livros/exibirLivros`)
   }
+
+  pesquisarLivro(): Observable<any> {
+    return this.http.get(`${this.url}/livros/buscar`)
+  }
 }

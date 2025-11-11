@@ -1,22 +1,24 @@
 <div class="bookInfo">
   <header>
-    <h3>{{ title }}</h3>
+    <h3>{{ book?.titulo }}</h3>
+
     @if (active) {
       <div class="bookOptions">
         <button>Editar</button>
         <button (click)="deletarLivro()">Deletar</button>
       </div>
     }
+
     <button (click)="toggleOptions($event)">⋮</button>
   </header>
   <body>
     <div>
-      <p>Autor: {{ autor }}</p>
-      <p>Gênero: {{ genero }}</p>
+      <p>Autor: {{ book?.autor }}</p>
+      <p>Gênero: {{ book?.genero }}</p>
     </div>
     <div>
-      <p>Lançamento: {{ ano_lancamento }}</p>
-      <p>ISBN: {{ isbn }}</p>
+      <p>Lançamento: {{ book?.anoLancamento }}</p>
+      <p>ISBN: {{ book?.isbn }}</p>
     </div>
   </body>
 </div>

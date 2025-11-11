@@ -18,12 +18,16 @@ import { Book } from '../../services/book';
 })
 
 export class Home {
+  @Output() searchBtn = new EventEmitter<void>();
+  books: any[] = []
+
   http = inject(HttpClient)
   router = inject(Router)
   bookService = inject(Book)
   url = environment.apiUrl
   mostrarLivro = true
   hasError = false
+  empty = true
 
   titlePlaceholder = "Título"
   autorPlaceholder = "Autor"
@@ -37,6 +41,7 @@ export class Home {
   genero = new FormControl('')
   isbn = new FormControl('')
   bookId = new FormControl('')
+  // searchBar = new FormControl('')
 
   limpar() {
     this.titulo.setValue('')
@@ -106,5 +111,13 @@ export class Home {
         error: (err) => console.log(err.error)
       })
     }
+  }
+
+  onSearch() {
+
+  }
+
+  onSearchClick() {
+    this.searchBtn.emit()
   }
 }

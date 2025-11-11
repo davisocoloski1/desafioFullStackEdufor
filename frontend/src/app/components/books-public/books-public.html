@@ -5,7 +5,11 @@
   </header>
   <body>
     @for (book of books; track book.id) {
-      <app-book-info-form></app-book-info-form>
+      <app-book-info-form
+      [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"
+      ></app-book-info-form>
+    } @empty {
+      <p>Nenhum livro encontrado</p>
     }
   </body>
 </body>

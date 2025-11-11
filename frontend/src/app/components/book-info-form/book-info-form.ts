@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Output, EventEmitter, Input } from '@angular/core';
 import { Book } from '../../services/book';
 import { RouterLink, Router } from '@angular/router';
 @Component({
@@ -7,63 +7,22 @@ import { RouterLink, Router } from '@angular/router';
   templateUrl: './book-info-form.html',
   styleUrl: './book-info-form.scss',
 })
-export class BookInfoForm implements OnInit {
+export class BookInfoForm {
   active: boolean = false
   bookService = inject(Book)
   @Output() ultimoLivroEncontrado = new EventEmitter<boolean>();
+  @Input() book: any
+  @Output() delete = new EventEmitter<number>();
+  @Output() edit = new EventEmitter<number>();
 
   constructor(private elementRef: ElementRef) {}
 
-  ngOnInit(): void {
-    this.ultimoLivro()
-  }
-
-  title: any
-  autor: any
-  ano_lancamento: any
-  genero: any
-  isbn: any
-  bookId: any
-
   deletarLivro() {
-    this.bookService.deletarLivro(this.bookId).subscribe({
-      next: (res: any) => {
-        console.log(res)
-
-        setTimeout(() => {
-          window.location.reload()
-        }, 2000)
-      },
-      error: (err: any) => {
-        const msg = err.error?.message
-        alert(msg)
-      }
-    })
+    this.delete.emit(this.book.id)
   }
 
   editarLivro() {
-    // this.bookService.editarLivro(this.bookId, {})
-  }
-
-  ultimoLivro() {
-    this.bookService.exibirUltimoLivro().subscribe({
-      next: (res: any) => {
-        if (!res) {
-          this.ultimoLivroEncontrado.emit(false)
-          return;
-        }
-
-        this.ultimoLivroEncontrado.emit(true)
-        this.bookId = res.id
-        this.title = res.titulo
-        this.autor = res.autor
-        this.ano_lancamento = res.anoLancamento
-        this.genero = res.genero
-        this.isbn = res.isbn
-        console.log(res)
-      },
-      error: (err: any) => console.log(err.error)
-    })
+    this.edit.emit(this.book.id);
   }
 
   toggleOptions(event: MouseEvent) {

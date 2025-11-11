@@ -6,7 +6,10 @@
   </header>
   <body>
 
-    <app-search-book></app-search-book>
+    <div class="top-row">
+      <app-search-book (searchBtn)="onSearch()"></app-search-book>
+      <button id="buscar" (click)="onSearchClick()">Buscar</button>
+    </div>
   
     <div class="bookManagement">
       <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
@@ -24,7 +27,7 @@
     <app-books-index></app-books-index>
     @if (mostrarLivro) {
       <h2>Último livro adicionado: </h2>
-      <app-book-info-form (ultimoLivroEncontrado)="onUltimoLivroEncontrado($event)"></app-book-info-form>
+
     } @else {
       <h2>Você não tem livros registrados</h2>
     }

@@ -15,30 +15,28 @@ export class BooksPublic implements OnInit{
   url = environment.apiUrl
   books: any[] = []
 
-  title: any
-  autor: any
-  ano_lancamento: any
-  genero: any
-  isbn: any
-
   ngOnInit(): void {
     this.exibirLivros()
   }
 
-  alternarLivros() {
-    for (let book of this.books) {
-      this.title = book.titulo
-      this.autor = book.autor
-      this.ano_lancamento = book.ano_lancamento
-      this.genero = book.genero
-      this.isbn = book.isbn
-    }
+  deletarLivro(id: number) {
+    console.log('Deletando livro: ', id)
+    this.bookService.deletarLivro(id).subscribe({
+      next: () => {
+        this.books = this.books.filter(b => b.id !== id)
+      },
+      error: (err) => console.log(err.error)
+    })
+  }
+
+  editarLivro(id: number) {
+    console.log('Editando livro: ', id)
   }
 
   exibirLivros() {
     this.bookService.exibirLivros().subscribe({
       next: (res: any) => {
-        this.books = res.data
+        this.books = res.data.filter((book:any) => !book.deletedAt)
         console.log(this.books)
       },
       error: (err: any) => console.log(err.error)

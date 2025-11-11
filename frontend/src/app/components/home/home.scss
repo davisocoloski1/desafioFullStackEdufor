@@ -87,12 +87,27 @@ body {
 .actions-row app-add-book-btn button,
 .actions-row button {
   flex: 1;
-  min-width: 150px;
+  min-width: 80px;
+}
+
+.top-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.top-row button {
+  width: 27%;
 }
 
 button,
 app-add-book-btn button {
-  width: 150px;
+  width: 80px;
   padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 6px;

@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './search-book.scss',
 })
 export class SearchBook {
-
+  
 }

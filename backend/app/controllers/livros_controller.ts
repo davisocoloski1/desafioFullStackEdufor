@@ -68,6 +68,7 @@ export default class LivrosController {
         const { page = 1, limit = 10} = request.qs()
         const books = await Book.query()
         .where('user_id', user.id)
+        .whereNull('deleted_at')
         .paginate(page, limit)
 
         return books
@@ -97,21 +98,25 @@ export default class LivrosController {
         
     }
 
-    async show({ params, auth, response }: HttpContext) {
+    async show({ request, auth }: HttpContext) {
         const user = auth.user!
 
-        const book = Book.query()
+        const { titulo, autor, genero, isbn, ano } = request.qs()
+        const query = Book.query()
         .where('user_id', user.id)
-        .andWhere('titulo', params.titulo)
-        .first()
+        .andWhereNotNull('deleted_at')
 
-        if (!book) {
-            return response.notFound({
-                message: 'Livro não encontrado.'
-            })
-        }
+        query.andWhere((sub) => {
+            if (titulo) sub.orWhereILike('titulo', `%${titulo}%`)
+            if (autor) sub.orWhereILike('autor', `%${autor}%`)
+            if (genero) sub.orWhereILike('genero', `%${genero}%`)
+            if (isbn) sub.orWhere('isbn', isbn)
+            if (ano) sub.orWhere('ano_lancamento', ano)
+        })
 
-        return book
+        const books = await query
+        return books
+        
     }
 
     async destroy({ params, response }: HttpContext) {

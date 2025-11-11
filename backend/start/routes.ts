@@ -19,4 +19,6 @@ router.group(() => {
   router.get('exibirLivros', [() => import('#controllers/livros_controller'), 'index'])
 
   router.get('ultimoLivro', [() => import('#controllers/livros_controller'), 'showLast'])
+
+  router.get('buscar', [() => import('#controllers/livros_controller'), 'show'])
 }).prefix('api/v1/livros').use(middleware.auth())
