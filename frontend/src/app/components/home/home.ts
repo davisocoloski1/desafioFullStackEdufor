@@ -2,7 +2,6 @@ import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { RouterLink, Router } from "@angular/router";
 import { SearchBook } from "../search-book/search-book";
 import { AddBookBtn } from "../add-book-btn/add-book-btn";
-import { ActionsSelect } from '../actions-select/actions-select';
 import { BookInfoForm } from '../book-info-form/book-info-form';
 import { FormControl, ReactiveFormsModule  } from '@angular/forms';
 import { BooksIndex } from "../books-index/books-index";
@@ -12,7 +11,7 @@ import { Book } from '../../services/book';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SearchBook, AddBookBtn, ActionsSelect, BookInfoForm, ReactiveFormsModule, BooksIndex],
+  imports: [RouterLink, SearchBook, AddBookBtn, BookInfoForm, ReactiveFormsModule, BooksIndex],
   templateUrl: './home.html',
    standalone: true,
   styleUrl: './home.scss',
@@ -21,14 +20,11 @@ import { Book } from '../../services/book';
 export class Home {
   http = inject(HttpClient)
   router = inject(Router)
+  bookService = inject(Book)
   url = environment.apiUrl
-  login = false
+  mostrarLivro = true
+  hasError = false
 
-  constructor(private bookService: Book) {}
-
-  selected: string = 'Adicionar'
-  isDelete: boolean = false
-  
   titlePlaceholder = "Título"
   autorPlaceholder = "Autor"
   anoPlaceholder = "Ano de lançamento"
@@ -50,15 +46,45 @@ export class Home {
     this.isbn.setValue('')
   }
 
+  onUltimoLivroEncontrado(valor: boolean) {
+    if (valor) {
+      this.mostrarLivro = true
+    } else {
+      this.mostrarLivro = false
+    }
+  }
+
   checkNullValues() {
-    let hasError = false
-    if (this.titulo.value?.trim()) this.titlePlaceholder = 'Campo obrigatório'; hasError = true
-    if (this.autor.value?.trim()) this.autorPlaceholder = 'Campo obrigatório'; hasError = true
-    if (this.ano.value?.trim()) this.anoPlaceholder = 'Campo obrigatório'; hasError = true
-    if (this.genero.value?.trim()) this.generoPlaceholder = 'Campo obrigatório'; hasError = true
-    if (this.isbn.value?.trim()) this.isbnPlaceholder = 'Campo obrigatório'; hasError = true
+    if (!this.titulo.value?.trim()) {
+  this.titlePlaceholder = 'Campo obrigatório';
+  this.hasError = true;
+  }
+  if (!this.autor.value?.trim()) {
+    this.autorPlaceholder = 'Campo obrigatório';
+    this.hasError = true;
+  }
+  if (!this.ano.value?.trim()) {
+    this.anoPlaceholder = 'Campo obrigatório';
+    this.hasError = true;
+  }
+  if (!this.genero.value?.trim()) {
+    this.generoPlaceholder = 'Campo obrigatório';
+    this.hasError = true;
+  }
+  if (!this.isbn.value?.trim()) {
+    this.isbnPlaceholder = 'Campo obrigatório';
+    this.hasError = true;
+  }
+
+  setTimeout(() => {
+    this.titlePlaceholder = "Título"
+    this.autorPlaceholder = "Autor"
+    this.anoPlaceholder = "Ano de lançamento"
+    this.generoPlaceholder = "Gênero"
+    this.isbnPlaceholder = "ISBN"
+  }, 5000)
     
-    if (hasError) return;
+    if (this.hasError) return;
   }
 
   bookMenuAction() {
@@ -67,22 +93,16 @@ export class Home {
     let ano = Number(this.ano.value ?? 0);
     let genero = this.genero.value ?? '';
     let isbn = Number(this.isbn.value ?? 0);
-    let bookId = Number(this.bookId.value ?? 0);
-    console.log(this.selected)
 
-    if (this.selected === 'Adicionar') {
+    if (!this.hasError) {
       this.bookService.adicionarLivro({ titulo, autor, ano_lancamento: ano, genero, isbn }).subscribe({
-        next: (res: any) => console.log(res),
-        error: (err) => console.log(err.error)
-      })
-    } else if (this.selected === 'Editar') {
-      this.bookService.editarLivro(bookId, { titulo, autor, ano_lancamento: ano, genero, isbn }).subscribe({
-        next: (res: any) => console.log(res),
-        error: (err) => console.log(err.error)
-      })
-    } else if (this.selected === 'Deletar') {
-      this.bookService.deletarLivro(bookId).subscribe({
-        next: (res: any) => console.log(res),
+        next: (res: any) => {
+          console.log(res)
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000)
+        },
         error: (err) => console.log(err.error)
       })
     }

@@ -3,4 +3,9 @@
     <a routerLink="">Menu</a>
     <a routerLink="/login">Login/Registro</a>
   </header>
+  <body>
+    @for (book of books; track book.id) {
+      <app-book-info-form></app-book-info-form>
+    }
+  </body>
 </body>

@@ -16,6 +16,10 @@ export class Signin {
   router = inject(Router)
   url = environment.apiUrl
   login = false
+  mostrarSenha = false
+
+  errorMsg = ''
+  registerError = false
 
   usernameInput = new FormControl('')
   emailInput = new FormControl('')
@@ -31,7 +35,20 @@ export class Signin {
     this.http.post(`${this.url}/usuarios/registros`, { username, email, password, password_confirmation: password }).subscribe({
       next: (res: any) => {
         this.router.navigate([""])
-      }, error: (err) => console.log(err.error)
+      }, error: (err) => {
+        console.log(err)
+
+        this.registerError = true
+        if (err.error?.message) {
+          this.errorMsg = err.error.message;
+        } else {
+          this.errorMsg = 'Erro ao tentar registrar usuário.'
+        }
+
+        setTimeout(() => {
+          this.registerError = false
+        }, 10000);
+      }
     })
   }
 }

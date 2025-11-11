@@ -73,6 +73,30 @@ export default class LivrosController {
         return books
     }
 
+    async showLast({ auth, response }: HttpContext) {
+        try {
+            const user = auth.user!
+            
+            const book = Book.query()
+            .where('user_id', user.id)
+            .whereNull('deleted_at')
+            .orderBy('id', 'desc')
+            .first()
+            return book;
+        } catch (error) {
+            console.error('Erro ao buscar o livro: ', error.message)
+
+            if (error.code === 'E_ROW_NOT_FOUND') {
+                return response.notFound({ message: 'Livro não encontrado' })
+            }
+
+            return response.internalServerError({
+                message: 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
+            })
+        }
+        
+    }
+
     async show({ params, auth, response }: HttpContext) {
         const user = auth.user!
 
@@ -91,15 +115,32 @@ export default class LivrosController {
     }
 
     async destroy({ params, response }: HttpContext) {
-        const book = await Book.find(params.id)
+        try {
+            const book = await Book.find(params.id)
+    
+            if (!book) {
+                return response.notFound({ message: "Livro não encontrado" })
+            }
 
-        if (!book) {
-            return response.notFound({ message: "Livro não encontrado" })
+            if (book.deletedAt) {
+                return response.badRequest({ message: 'Este livro já foi deletado' })
+            }
+    
+            book.deletedAt = DateTime.now()
+            await book.save()
+    
+            return response.ok({ message: `O livro '${book.titulo}' foi deletado.` })
+        } catch (error) {
+            console.error('Erro ao deletar livro: ', error.message)
+
+            if (error.code === 'E_ROW_NOT_FOUND') {
+                return response.notFound({ message: 'Livro não encontrado.' })
+            }
+
+            return response.internalServerError({
+                message: 'Ocorreu um erro ao tentar deletar o livro. Tente novamente mais tarde.'
+            })
         }
 
-        book.deletedAt = DateTime.now()
-        await book.save()
-
-        return response.ok({ message: `O livro '${book.titulo}' foi deletado.` })
     }
 }

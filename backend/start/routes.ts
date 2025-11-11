@@ -17,4 +17,6 @@ router.group(() => {
   router.put(':id/editar', [() => import('#controllers/livros_controller'), 'update'])
 
   router.get('exibirLivros', [() => import('#controllers/livros_controller'), 'index'])
+
+  router.get('ultimoLivro', [() => import('#controllers/livros_controller'), 'showLast'])
 }).prefix('api/v1/livros').use(middleware.auth())

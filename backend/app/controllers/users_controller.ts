@@ -41,22 +41,46 @@ export default class UsersController {
     }
 
     async store({ request, response }: HttpContext) {
-        const userSchema = schema.create({
-            username: schema.string({}, [
-                rules.minLength(3),
-                rules.maxLength(20),
-            ]),
-            email: schema.string({}, [rules.email()]),
-            password: schema.string({}, [
-                rules.minLength(6),
-                rules.maxLength(20),
-                rules.confirmed(),
-            ])
-        })
+        try {
+            const userSchema = schema.create({
+                username: schema.string({}, [
+                    rules.minLength(3),
+                    rules.maxLength(20),
+                ]),
+                email: schema.string({}, [rules.email()]),
+                password: schema.string({}, [
+                    rules.minLength(6),
+                    rules.maxLength(20),
+                ])
+            })
+    
+            const data = await request.validate({ schema: userSchema })
+            const user = await User.create(data)
+    
+            return response.created(user);
+        } catch (error) {
+            console.log('ERRO CAPTURADO')
+            console.dir(error, { depth: null })
 
-        const data = await request.validate({ schema: userSchema })
-        const user = await User.create(data)
+            if (error.code === '23505') {
+                if (error.detail?.includes('email')) {
+                    return response.status(400).send({ message: 'Este email já está em uso.' })
+                } else if (error.detail?.includes('username')) {
+                    return response.status(400).send({ message: 'Este username já está em uso.' })
+                } else {
+                    return response.status(400).send({ message: 'Usuário já existe.' })
+                }
+            }
 
-        return response.created(user);
+            if (error.messages) {
+                return response.status(422).send(error.messages)
+            }
+
+            return response.status(500).send({
+                message: 'Erro interno do servidor',
+                error: error.message,
+            })
+        }
+
     }
 }

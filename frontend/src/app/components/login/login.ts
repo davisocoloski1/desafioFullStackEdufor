@@ -14,6 +14,7 @@ export class Login {
   http = inject(HttpClient)
   router = inject(Router)
   login = false
+  mostrarSenha = false
   url = environment.apiUrl
 
   usernameInput = new FormControl('')
@@ -22,6 +23,8 @@ export class Login {
 
   textButton = "Entrar"
   textButton2 = "Entrar em uma conta"
+  errorMsg = ''
+  loginError = false
   registro = true
 
   alternarLogin() {
@@ -47,7 +50,18 @@ export class Login {
         this.login = true
         this.router.navigate([""])
       },
-      error: (err) => console.log(err)
+      error: (err) => {
+        this.loginError = true
+        if (err.status === 401 && err.error?.message) {
+          this.errorMsg = err.error.message
+        } else {
+          this.errorMsg = 'Erro ao tentar fazer login'
+        }
+
+        setTimeout(() => {
+          this.loginError = false
+        }, 10000)
+      }
     })
   }
 }

@@ -22,4 +22,12 @@ export class Book {
   deletarLivro(bookId: number): Observable<any> {
     return this.http.put(`${this.url}/livros/${bookId}/deletar`, { bookId })
   }
+
+  exibirUltimoLivro(): Observable<any> {
+    return this.http.get(`${this.url}/livros/ultimoLivro`)
+  }
+
+  exibirLivros(): Observable<any> {
+    return this.http.get(`${this.url}/livros/exibirLivros`)
+  }
 }

@@ -4,7 +4,7 @@
     @if (active) {
       <div class="bookOptions">
         <button>Editar</button>
-        <button>Deletar</button>
+        <button (click)="deletarLivro()">Deletar</button>
       </div>
     }
     <button (click)="toggleOptions($event)">⋮</button>
