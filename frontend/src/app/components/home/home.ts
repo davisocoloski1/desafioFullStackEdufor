@@ -8,6 +8,7 @@ import { FormControl, ReactiveFormsModule  } from '@angular/forms';
 import { BooksIndex } from "../books-index/books-index";
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Book } from '../../services/book';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,8 @@ export class Home {
   router = inject(Router)
   url = environment.apiUrl
   login = false
+
+  constructor(private bookService: Book) {}
 
   selected: string = 'Adicionar'
   isDelete: boolean = false
@@ -47,14 +50,6 @@ export class Home {
     this.isbn.setValue('')
   }
 
-  @Output() text = new EventEmitter<{
-    titulo: string,
-    autor: string,
-    ano_lancamento: number
-    genero: string,
-    isbn: number,
-  }>();
-
   checkNullValues() {
     let hasError = false
     if (this.titulo.value?.trim()) this.titlePlaceholder = 'Campo obrigatório'; hasError = true
@@ -67,26 +62,26 @@ export class Home {
   }
 
   bookMenuAction() {
-    let titulo = this.titulo.value;
-    let autor = this.autor.value;
-    let ano = this.ano.value;
-    let genero = this.genero.value;
-    let isbn = this.isbn.value;
-    let bookId = this.bookId.value;
+    let titulo = this.titulo.value ?? '';
+    let autor = this.autor.value ?? '';
+    let ano = Number(this.ano.value ?? 0);
+    let genero = this.genero.value ?? '';
+    let isbn = Number(this.isbn.value ?? 0);
+    let bookId = Number(this.bookId.value ?? 0);
     console.log(this.selected)
 
     if (this.selected === 'Adicionar') {
-      this.http.post(`${this.url}/livros/adicionar`, { titulo, autor, ano_lancamento: ano, genero, isbn }).subscribe({
+      this.bookService.adicionarLivro({ titulo, autor, ano_lancamento: ano, genero, isbn }).subscribe({
         next: (res: any) => console.log(res),
         error: (err) => console.log(err.error)
       })
     } else if (this.selected === 'Editar') {
-      this.http.put(`${this.url}/livros/${bookId}/editar`, { titulo, autor, ano, genero, isbn }).subscribe({
+      this.bookService.editarLivro(bookId, { titulo, autor, ano_lancamento: ano, genero, isbn }).subscribe({
         next: (res: any) => console.log(res),
         error: (err) => console.log(err.error)
       })
     } else if (this.selected === 'Deletar') {
-      this.http.put(`${this.url}/livros/${bookId}/deletar`, { bookId }).subscribe({
+      this.bookService.deletarLivro(bookId).subscribe({
         next: (res: any) => console.log(res),
         error: (err) => console.log(err.error)
       })

@@ -1,7 +1,13 @@
 <div class="bookInfo">
   <header>
     <h3>{{ title }}</h3>
-    <button>⋮</button>
+    @if (active) {
+      <div class="bookOptions">
+        <button>Editar</button>
+        <button>Deletar</button>
+      </div>
+    }
+    <button (click)="toggleOptions($event)">⋮</button>
   </header>
   <body>
     <div>
