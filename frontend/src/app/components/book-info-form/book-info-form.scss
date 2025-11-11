@@ -1,0 +1,80 @@
+.bookInfo {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px 35px;
+  margin: 30px 0;
+  width: 95%;
+  max-width: 900px;
+  transition: 0.25s ease;
+}
+
+.bookInfo:hover {
+  border-color: #0080ff;
+  box-shadow: 0 0 12px rgba(0, 128, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+/* Cabeçalho: título + botão */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+header h3 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: #333;
+}
+
+header button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: 0.25s ease;
+}
+
+header button:hover {
+  background-color: #f0f0f0;
+  border-color: #0080ff;
+  color: #0080ff;
+  box-shadow: 0 0 8px rgba(0, 128, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+header button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 128, 255, 0.2);
+}
+
+/* Detalhes (duas colunas) */
+body {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+body div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  body {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

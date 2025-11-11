@@ -3,6 +3,7 @@ import { RouterLink, Router } from "@angular/router";
 import { SearchBook } from "../search-book/search-book";
 import { AddBookBtn } from "../add-book-btn/add-book-btn";
 import { ActionsSelect } from '../actions-select/actions-select';
+import { BookInfoForm } from '../book-info-form/book-info-form';
 import { FormControl, ReactiveFormsModule  } from '@angular/forms';
 import { BooksIndex } from "../books-index/books-index";
 import { environment } from '../../../environments/environment';
@@ -10,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SearchBook, AddBookBtn, ActionsSelect, ReactiveFormsModule, BooksIndex],
+  imports: [RouterLink, SearchBook, AddBookBtn, ActionsSelect, BookInfoForm, ReactiveFormsModule, BooksIndex],
   templateUrl: './home.html',
    standalone: true,
   styleUrl: './home.scss',
