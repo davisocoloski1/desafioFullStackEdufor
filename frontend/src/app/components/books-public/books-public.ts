@@ -3,6 +3,7 @@ import { RouterLink } from "@angular/router";
 import { Book } from '../../services/book';
 import { environment } from '../../../environments/environment';
 import { BookInfoForm } from '../book-info-form/book-info-form';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-books-public',
@@ -11,7 +12,10 @@ import { BookInfoForm } from '../book-info-form/book-info-form';
   styleUrl: './books-public.scss',
 })
 export class BooksPublic implements OnInit{
-  bookService = inject(Book)
+  bookService= inject(Book)
+  auth = inject(Auth)
+
+  isLogged = this.auth.isLogged
   url = environment.apiUrl
   books: any[] = []
 

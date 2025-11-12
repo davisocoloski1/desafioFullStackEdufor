@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, inject, Output, EventEmitter, Input } from '@angular/core';
 import { Book } from '../../services/book';
 import { RouterLink, Router } from '@angular/router';
+
 @Component({
   selector: 'app-book-info-form',
   imports: [],
@@ -10,6 +11,8 @@ import { RouterLink, Router } from '@angular/router';
 export class BookInfoForm {
   active: boolean = false
   bookService = inject(Book)
+  router = inject(Router)
+
   @Output() ultimoLivroEncontrado = new EventEmitter<boolean>();
   @Input() book: any
   @Output() delete = new EventEmitter<number>();
@@ -22,7 +25,9 @@ export class BookInfoForm {
   }
 
   editarLivro() {
-    this.edit.emit(this.book.id);
+    this.router.navigate(["edit-book"])
+    this.edit.emit(this.book?.id);
+    this.bookService.setBook(this.book)
   }
 
   toggleOptions(event: MouseEvent) {

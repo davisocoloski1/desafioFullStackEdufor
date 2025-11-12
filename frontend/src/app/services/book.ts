@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class Book {
   private url = environment.apiUrl
+  selectedBook = signal<any | null>(null)
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +32,13 @@ export class Book {
     return this.http.get(`${this.url}/livros/exibirLivros`)
   }
 
-  pesquisarLivro(): Observable<any> {
-    return this.http.get(`${this.url}/livros/buscar`)
+  pesquisarLivro(valor: string) {
+    return this.http.get(`${this.url}/livros/buscar`, {
+      params: { query: valor }
+    })
+  }
+
+  setBook(book: any) {
+    this.selectedBook.set(book)
   }
 }

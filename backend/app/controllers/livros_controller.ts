@@ -101,22 +101,19 @@ export default class LivrosController {
     async show({ request, auth }: HttpContext) {
         const user = auth.user!
 
-        const { titulo, autor, genero, isbn, ano } = request.qs()
-        const query = Book.query()
+        const { query } = request.qs()
+        const books = await Book.query()
         .where('user_id', user.id)
-        .andWhereNotNull('deleted_at')
-
-        query.andWhere((sub) => {
-            if (titulo) sub.orWhereILike('titulo', `%${titulo}%`)
-            if (autor) sub.orWhereILike('autor', `%${autor}%`)
-            if (genero) sub.orWhereILike('genero', `%${genero}%`)
-            if (isbn) sub.orWhere('isbn', isbn)
-            if (ano) sub.orWhere('ano_lancamento', ano)
+        .whereNull('deleted_at')
+        .andWhere((sub) => {
+            if (query) {
+                sub.whereLike('titulo', `%${query}%`)
+                    .orWhereILike('autor', `%${query}%`)
+                    .orWhereILike('genero', `%${query}%`)
+            }
         })
-
-        const books = await query
-        return books
         
+        return books
     }
 
     async destroy({ params, response }: HttpContext) {

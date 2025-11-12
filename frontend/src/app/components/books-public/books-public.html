@@ -3,13 +3,22 @@
     <a routerLink="">Menu</a>
     <a routerLink="/login">Login/Registro</a>
   </header>
-  <body>
-    @for (book of books; track book.id) {
-      <app-book-info-form
-      [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"
-      ></app-book-info-form>
-    } @empty {
-      <p>Nenhum livro encontrado</p>
-    }
-  </body>
+
+  <div class="container">
+
+    <main>
+      @for (book of books; track book.id) {
+        <app-book-info-form
+        [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"
+        ></app-book-info-form>
+      } @empty {
+        @if (!isLogged()) {
+          <p>Faça login para ver seus livros!</p>
+        } @else {
+          <p>Você não registrou nenhum livro</p>
+        }
+      }
+    </main>
+  </div>
+
 </body>

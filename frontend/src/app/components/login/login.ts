@@ -48,7 +48,11 @@ export class Login {
         localStorage.setItem('token', res.token);
         console.log(res.token)
         this.login = true
-        this.router.navigate([""])
+
+        setTimeout(() => {
+          this.router.navigate([""])
+        }, 2000)
+
       },
       error: (err) => {
         this.loginError = true

@@ -31,3 +31,60 @@ header a:hover {
   box-shadow: 0 0 8px rgba(0, 128, 255, 0.4);
   transform: translateY(-2px);
 }
+
+/* --- CONTAINER CENTRALIZADO --- */
+.container {
+  display: flex;
+  justify-content: center;
+  background: #f7f9fc;
+  padding: 40px 0;
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  max-width: 1300px;
+  width: 100%;
+  padding: 0 20px;  
+}
+
+/* --- CARDS --- */
+app-book-info-form {
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  padding: 25px 30px;
+  display: block;
+  transition: 0.25s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+app-book-info-form:hover {
+  border-color: #0080ff;
+  transform: translateY(-3px);
+}
+
+main p {
+  width: 100%;
+  text-align: center;
+  color: #555;
+  font-size: 1.1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 30px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsivo */
+@media (max-width: 1000px) {
+  main {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+}

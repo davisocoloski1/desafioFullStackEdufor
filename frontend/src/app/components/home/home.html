@@ -1,15 +1,17 @@
 <main>
   <header>
-    <a routerLink="/login">Login</a>
-    <a routerLink="/signin">Registro</a>
-    <a routerLink="/public_books">Listagem de Livros</a>
+    @if (!isLogged()) {
+      <a routerLink="/login">Login</a>
+      <a routerLink="/signin">Registro</a>
+    } @else {
+      <a routerLink="/public_books">Meus Livros</a>
+      <a routerLink="" (click)="logout()">Logout</a>
+    }
   </header>
   <body>
 
-    <div class="top-row">
-      <app-search-book (searchBtn)="onSearch()"></app-search-book>
-      <button id="buscar" (click)="onSearchClick()">Buscar</button>
-    </div>
+    <app-search-book (buscarLivro)="pesquisar($event)"></app-search-book>
+    <h3>{{ searchText }}</h3>
   
     <div class="bookManagement">
       <input type="text" [formControl]="titulo" [placeholder]="titlePlaceholder" class="input">
@@ -25,11 +27,13 @@
     </div>
     
     <app-books-index></app-books-index>
-    @if (mostrarLivro) {
-      <h2>Último livro adicionado: </h2>
+    <h2>{{ warnText }}</h2>
 
-    } @else {
-      <h2>Você não tem livros registrados</h2>
+    @for (book of books; track book.id) {
+      <div class="container">
+        <app-book-info-form [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"></app-book-info-form>
+      </div>
     }
+
   </body>
 </main>

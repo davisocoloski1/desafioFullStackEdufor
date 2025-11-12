@@ -8,6 +8,7 @@ import { BooksIndex } from "../books-index/books-index";
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../../services/book';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-home',
@@ -24,11 +25,17 @@ export class Home {
   http = inject(HttpClient)
   router = inject(Router)
   bookService = inject(Book)
+  auth = inject(Auth)
+  
   url = environment.apiUrl
   mostrarLivro = true
   hasError = false
   empty = true
+  
+  isLogged = this.auth.isLogged
 
+  warnText = ''
+  searchText = ''
   titlePlaceholder = "Título"
   autorPlaceholder = "Autor"
   anoPlaceholder = "Ano de lançamento"
@@ -49,14 +56,6 @@ export class Home {
     this.ano.setValue('')
     this.genero.setValue('')
     this.isbn.setValue('')
-  }
-
-  onUltimoLivroEncontrado(valor: boolean) {
-    if (valor) {
-      this.mostrarLivro = true
-    } else {
-      this.mostrarLivro = false
-    }
   }
 
   checkNullValues() {
@@ -108,16 +107,65 @@ export class Home {
             window.location.reload();
           }, 2000)
         },
-        error: (err) => console.log(err.error)
+        error: (err) => {
+          if (err.status === 401) {
+            this.warnText = 'Você precisa fazer login/registro primeiro!'
+            console.log(err.error)
+
+            setTimeout(() => {
+              this.warnText = ''
+            }, 5000)
+          }
+        }
       })
     }
   }
 
-  onSearch() {
+  pesquisar(valor: string) {
+    this.bookService.pesquisarLivro(valor).subscribe({
+      next: (res: any) => {
+        this.books = res
+        if (this.books.length === 0) {
+          this.searchText = 'Nenhum livro encontrado'
+        } else this.warnText = 'Livros encotrados: '
+      }, error: (err: any) => {
+        if (err.status === 401) {
+          this.searchText = 'Faça login para pesquisar livros.'
 
+          setTimeout(() => {
+            this.searchText = ''
+          }, 5000)
+        } else {
+          console.log(err.error)
+        }
+      }
+    })
   }
 
-  onSearchClick() {
-    this.searchBtn.emit()
+    deletarLivro(id: number) {
+    console.log('Deletando livro: ', id)
+    this.bookService.deletarLivro(id).subscribe({
+      next: () => {
+        this.books = this.books.filter(b => b.id !== id)
+      },
+      error: (err) => console.log(err.error)
+    })
+  }
+
+  editarLivro(id: number) {
+    console.log('Editando livro: ', id)
+  }
+
+  logout() {
+    this.auth.logout(`${this.url}/usuarios/logout`).subscribe({
+      next: (res: any) => {
+        localStorage.removeItem('token');
+        this.auth.isLogged.set(false)
+        console.log(res)
+        this.router.navigate([""])
+        window.location.reload()
+      },
+      error: (err: any) => console.log(err.error)
+    })
   }
 }

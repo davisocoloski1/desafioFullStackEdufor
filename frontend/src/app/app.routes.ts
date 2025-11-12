@@ -3,6 +3,7 @@ import { Home } from './components/home/home';
 import { Login } from './components/login/login';
 import { BooksPublic } from './components/books-public/books-public';
 import { Signin } from './components/signin/signin';
+import { EditBook } from './components/edit-book/edit-book';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
     {
         path: "signin",
         component: Signin
+    },
+    {
+        path: "edit-book",
+        component: EditBook
     }
 ];
