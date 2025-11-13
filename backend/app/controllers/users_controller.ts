@@ -46,21 +46,41 @@ export default class UsersController {
                 username: schema.string({}, [
                     rules.minLength(3),
                     rules.maxLength(20),
+                    rules.required()
                 ]),
-                email: schema.string({}, [rules.email()]),
+                email: schema.string({}, [
+                    rules.email(),
+                    rules.required()
+                ]),
                 password: schema.string({}, [
                     rules.minLength(6),
                     rules.maxLength(20),
+                    rules.required()
                 ])
             })
     
-            const data = await request.validate({ schema: userSchema })
+            const data = await request.validate({ 
+                schema: userSchema,
+                messages: {
+                    'username.minLength': 'O nome de usuário deve ter no mínimo 3 caracteres',
+                    'username.maxLength': 'O nome de usuário deve ter no máximo 20 caracteres',
+                    'username.required': 'O campo "nome de usuário" é obrigatório.',
+
+                    'email.email': 'O email informado não é válido.',
+                    'email.required': 'O campo "email" é obrigatório.',
+
+                    'password.minLength': 'A senha deve ter no mínimo 6 caracteres.',
+                    'password.maxLength': 'A senha deve ter no máximo 20 caracteres.',
+                    'password.required': 'O campo "senha" é obrigatório.'
+                }
+            })
+
             const user = await User.create(data)
     
             return response.created(user);
         } catch (error) {
             console.log('ERRO CAPTURADO')
-            console.dir(error, { depth: null })
+            console.dir(error)
 
             if (error.code === '23505') {
                 if (error.detail?.includes('email')) {
@@ -72,14 +92,7 @@ export default class UsersController {
                 }
             }
 
-            if (error.messages) {
-                return response.status(422).send(error.messages)
-            }
-
-            return response.status(500).send({
-                message: 'Erro interno do servidor',
-                error: error.message,
-            })
+            return response.badRequest(error.messages)
         }
 
     }

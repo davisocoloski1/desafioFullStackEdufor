@@ -29,7 +29,22 @@ export default class LivrosController {
 
         })
 
-        const data = await request.validate({ schema: bookSchema })
+        const data = await request.validate({ 
+            schema: bookSchema,
+            messages: {
+                'titulo.required': 'O campo "título" é obrigatório.',
+                'autor.required': 'O campo "autor" é obrigatório.',
+
+                'ano_lancamento.required': 'O campo "ano de lançamento" é obrigatório.',
+                'ano_lancamento.range': 'O ano de lançamento deve estar entre 1000 e 9999.',
+
+                'genero.required': 'O campo "gênero" é obrigatório.',
+
+                'isbn.required': 'O campo "isbn" é obrigatório.',
+                'isbn.range': 'O ISBN deve ser um número de 13 dígitos.',
+                'isbn.unsigned': 'O ISBN deve ser um número positivo.'
+            }
+         })
 
         const newBook = await Book.create({
             userId: user.id,

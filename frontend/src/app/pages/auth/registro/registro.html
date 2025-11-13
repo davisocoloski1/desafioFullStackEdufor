@@ -1,0 +1,45 @@
+<app-top-navbar></app-top-navbar>
+<div class="container py-5">
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-12 col-md-6 col-lg-4">
+      
+      <div class="card shadow-lg p-4">
+        <h3 class="text-center mb-4 fw-bold">Criar Conta</h3>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-control form-control-lg" 
+                [placeholder]="emailPlaceholder" [formControl]="email">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Senha</label>
+          <input type="password" class="form-control form-control-lg" 
+                [placeholder]="passwordPlaceholder" [formControl]="password">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control form-control-lg" 
+                [placeholder]="usernamePlaceholder" [formControl]="username">
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 mb-2" (click)="registrar()">
+          Registrar
+        </button>
+
+        <button routerLink="/users/login" class="btn btn-outline-secondary w-100">
+          Já possui uma conta? Entre aqui
+        </button>
+
+        @if (errorText) {
+          <div class="alert alert-danger text-center mt-3">
+            {{ errorText }}
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>

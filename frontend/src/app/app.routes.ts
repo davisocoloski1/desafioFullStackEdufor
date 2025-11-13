@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
-import { Home } from './components/home/home';
-import { Login } from './components/login/login';
-import { BooksPublic } from './components/books-public/books-public';
-import { Signin } from './components/signin/signin';
-import { EditBook } from './components/edit-book/edit-book';
+import { Home } from './pages/home/home';
+import { LoginPage } from './pages/auth/login-page/login-page';
+import { UserBooks } from './pages/user-books/user-books';
+import { Registro } from './pages/auth/registro/registro';
 
 export const routes: Routes = [
     {
@@ -11,19 +10,15 @@ export const routes: Routes = [
         component: Home
     },
     {
-        path: "login",
-        component: Login
+        path: "users/login",
+        component: LoginPage
     },
     {
-        path: "public_books",
-        component: BooksPublic
+        path: "users/registro",
+        component: Registro
     },
     {
-        path: "signin",
-        component: Signin
-    },
-    {
-        path: "edit-book",
-        component: EditBook
+        path: "users/books",
+        component: UserBooks
     }
 ];
