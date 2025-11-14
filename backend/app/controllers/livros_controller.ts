@@ -5,57 +5,66 @@ import { schema, rules } from '@adonisjs/validator'
 
 export default class LivrosController {
     async store({ auth, request, response }: HttpContext) {
-        const user = auth.user!
-        
-        const bookSchema = schema.create({
-            titulo: schema.string({}, [
-                rules.required()
-            ]),
-            autor: schema.string({}, [
-                rules.required()
-            ]),
-            ano_lancamento: schema.number([
-                rules.required(),
-                rules.range(1000, 9999)
-            ]),
-            genero: schema.string({}, [
-                rules.required()
-            ]),
-            isbn: schema.number([
-                rules.required(),
-                rules.range(1000000000000, 9999999999999),
-                rules.unsigned()
-            ])
+        try {
+            const user = auth.user!
+            
+            const bookSchema = schema.create({
+                titulo: schema.string({}, [
+                    rules.required()
+                ]),
+                autor: schema.string({}, [
+                    rules.required()
+                ]),
+                ano_lancamento: schema.number([
+                    rules.required(),
+                    rules.range(1, 2025)
+                ]),
+                genero: schema.string({}, [
+                    rules.required()
+                ]),
+                isbn: schema.number([
+                    rules.required(),
+                    rules.range(1000000000000, 9999999999999),
+                    rules.unsigned()
+                ])
+    
+            })
+    
+            const data = await request.validate({ 
+                schema: bookSchema,
+                messages: {
+                    'titulo.required': 'O campo "título" é obrigatório.',
+                    'autor.required': 'O campo "autor" é obrigatório.',
+    
+                    'ano_lancamento.required': 'O campo "ano de lançamento" é obrigatório.',
+                    'ano_lancamento.range': 'O ano de lançamento deve estar entre 1 e 2025.',
+    
+                    'genero.required': 'O campo "gênero" é obrigatório.',
+    
+                    'isbn.required': 'O campo "isbn" é obrigatório.',
+                    'isbn.range': 'O ISBN deve ser um número de 13 dígitos.',
+                    'isbn.unsigned': 'O ISBN deve ser um número positivo.'
+                }
+             })
+    
+            const newBook = await Book.create({
+                userId: user.id,
+                titulo: data.titulo,
+                autor: data.autor,
+                ano_lancamento: data.ano_lancamento,
+                genero: data.genero,
+                isbn: data.isbn
+            })
+    
+            return response.created(newBook)
+        } catch (error) {
+            console.log('ERRO CAPTURADO')
 
-        })
-
-        const data = await request.validate({ 
-            schema: bookSchema,
-            messages: {
-                'titulo.required': 'O campo "título" é obrigatório.',
-                'autor.required': 'O campo "autor" é obrigatório.',
-
-                'ano_lancamento.required': 'O campo "ano de lançamento" é obrigatório.',
-                'ano_lancamento.range': 'O ano de lançamento deve estar entre 1000 e 9999.',
-
-                'genero.required': 'O campo "gênero" é obrigatório.',
-
-                'isbn.required': 'O campo "isbn" é obrigatório.',
-                'isbn.range': 'O ISBN deve ser um número de 13 dígitos.',
-                'isbn.unsigned': 'O ISBN deve ser um número positivo.'
+            if (error.code === '23505') {
+                return response.status(400).send({ message: 'Um livro com esse ISBN já foi cadastrado.'})
             }
-         })
+        }
 
-        const newBook = await Book.create({
-            userId: user.id,
-            titulo: data.titulo,
-            autor: data.autor,
-            ano_lancamento: data.ano_lancamento,
-            genero: data.genero,
-            isbn: data.isbn
-        })
-
-        return response.created(newBook)
     }
 
     async update({ params, request, response }: HttpContext) {

@@ -1,0 +1,11 @@
+.add-link {
+  color: #007bff; /* azul bootstrap */
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.add-link:hover {
+  text-decoration: underline;
+  color: #0056b3; /* azul mais escuro no hover */
+}

@@ -1,0 +1,57 @@
+.dropdown-item {
+  transition: background-color 0.15s ease, transform 0.08s ease;
+  border-radius: 6px;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9; /* cinza bem claro */
+  transform: translateY(-1px);
+}
+
+.dropdown-item:active {
+  background-color: #e2e8f0; 
+  transform: translateY(0);
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #fee2e2; 
+  color: #b91c1c; 
+}
+
+.dropdown-item.text-danger:active {
+  background-color: #fecaca;
+  color: #991b1b;
+}
+
+.book-card {
+  min-height: 180px;
+  height: 100%;
+  border-radius: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Hover bonito */
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Título longo vira "..." */
+.book-title {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Em telas menores o título pode ocupar mais espaço */
+@media (max-width: 500px) {
+  .book-title {
+    max-width: 150px;
+  }
+}
+

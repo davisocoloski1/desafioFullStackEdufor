@@ -1,14 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { BookModel } from '../models/book-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Book {
   private url = environment.apiUrl
-  selectedBook = signal<any | null>(null)
+  selectedBook = signal<BookModel | null>(null)
 
   constructor(private http: HttpClient) {}
 
@@ -25,20 +26,24 @@ export class Book {
   }
 
   exibirUltimoLivro(): Observable<any> {
-    return this.http.get(`${this.url}/livros/ultimoLivro`)
+    return this.http.get<BookModel[]>(`${this.url}/livros/ultimoLivro`)
   }
 
   exibirLivros(): Observable<any> {
-    return this.http.get(`${this.url}/livros/exibirLivros`)
+    return this.http.get<BookModel[]>(`${this.url}/livros/exibirLivros`)
   }
 
   pesquisarLivro(valor: string) {
-    return this.http.get(`${this.url}/livros/buscar`, {
+    return this.http.get<BookModel[]>(`${this.url}/livros/buscar`, {
       params: { query: valor }
     })
   }
 
-  setBook(book: any) {
+  setBook(book: BookModel) {
     this.selectedBook.set(book)
   }
+}
+
+export interface Book {
+
 }

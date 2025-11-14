@@ -1,1 +1,8 @@
-<app-top-navbar>
+<app-top-navbar></app-top-navbar>
+<main>
+  <app-book-edit></app-book-edit>
+</main>
+<div *ngFor="let book of books">
+
+  <app-show-book-info [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"></app-show-book-info>
+</div>

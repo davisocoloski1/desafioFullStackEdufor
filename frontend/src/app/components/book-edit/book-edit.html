@@ -1,0 +1,61 @@
+<div class="container py-5">
+
+  <div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-6 col-lg-5">
+
+      <div class="card shadow-lg p-4">
+        <h3 class="text-center mb-4 fw-bold">{{ actionButton }}</h3>
+
+        <div class="mb-3">
+          <label class="form-label">Título</label>
+          <input type="text" class="form-control form-control-lg"
+                 [placeholder]="tituloPlaceholder" [formControl]="titulo">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Autor</label>
+          <input type="text" class="form-control form-control-lg"
+                 [placeholder]="autorPlaceholder" [formControl]="autor">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Ano</label>
+          <input type="text" class="form-control form-control-lg"
+                 [placeholder]="anoPlaceholder" [formControl]="ano">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Gênero</label>
+          <input type="text" class="form-control form-control-lg"
+                 [placeholder]="generoPlaceholder" [formControl]="genero">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">ISBN</label>
+          <input type="text" class="form-control form-control-lg"
+                 [placeholder]="isbnPlaceholder" [formControl]="isbn">
+        </div>
+
+        @if (errorText) {
+          <div class="alert alert-danger text-center mt-3">
+            {{ errorText }}
+          </div>
+        }
+
+        <button class="btn btn-primary btn-lg w-100 mb-2"
+                (click)="checkNullValues(); enviarLivro();">
+          {{ actionButton }}
+        </button>
+
+        <button class="btn btn-outline-secondary w-100"
+                (click)="limpar()">
+          Limpar Campos
+        </button>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
