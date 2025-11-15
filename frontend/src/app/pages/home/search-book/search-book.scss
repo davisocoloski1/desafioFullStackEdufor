@@ -1,0 +1,26 @@
+.search-wrapper input {
+  border-radius: 10px;
+}
+
+.search-wrapper button {
+  border-radius: 10px;
+}
+
+/* Ajuste suave no hover */
+.search-wrapper button:hover {
+  filter: brightness(1.08);
+}
+
+.slide-placeholder::placeholder {
+  display: inline-block;
+  animation: slide 6s linear infinite;
+  white-space: nowrap;
+}
+
+/* ANIMAÇÃO DO SLIDE */
+@keyframes slide {
+  0% { transform: translateX(0); }
+  30% { transform: translateX(0); }
+  60% { transform: translateX(-50%); } 
+  100% { transform: translateX(0); }
+}

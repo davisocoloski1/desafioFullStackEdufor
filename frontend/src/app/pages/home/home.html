@@ -1,8 +1,20 @@
 <app-top-navbar></app-top-navbar>
 <main>
+  <app-search-book (searchValue)="pesquisarLivro($event)"></app-search-book>
+  @if (books.length > 0) {
+    <div class="container mt-4">
+      <div class="row g-4 justify-content-center">
+
+        <div *ngFor="let book of books" class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <app-show-book-info
+            [book]="book"
+            (edit)="editarLivro($event)"
+            (delete)="deletarLivro($event)">
+          </app-show-book-info>
+        </div>
+
+      </div>
+    </div>
+  }
   <app-book-edit></app-book-edit>
 </main>
-<div *ngFor="let book of books">
-
-  <app-show-book-info [book]="book" (delete)="deletarLivro($event)" (edit)="editarLivro($event)"></app-show-book-info>
-</div>

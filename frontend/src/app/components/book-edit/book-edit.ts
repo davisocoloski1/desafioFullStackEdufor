@@ -72,14 +72,14 @@ export class BookEdit implements OnInit {
 
     const id = this.book?.id
 
-    if (id === undefined) {
-      this.errorText = 'Livro não encontrado.'
-      return
-    }
-
+    
     if (this.allowed && this.router.url === "/home") {
       this.criarLivro(titulo, autor, ano, genero, isbn)
     } else if (this.allowed && this.router.url === "/books/edit") {
+      if (id === undefined) {
+        this.errorText = 'Livro não encontrado.'
+        return
+      }
       this.editarLivro(id, titulo, autor, ano, genero, isbn)
     }
 
