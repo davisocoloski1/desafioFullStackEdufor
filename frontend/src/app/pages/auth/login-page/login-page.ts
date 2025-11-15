@@ -17,14 +17,20 @@ export class LoginPage {
   emailPlaceholder = 'Email'
   passwordPlaceholder = 'Password'
   errorText = ''
+  msg = history.state.msg ?? ''
 
   email = new FormControl('')
   password = new FormControl('')
 
   login() {
-    this.auth.login(this.email.value ?? '', this.password.value ?? '').subscribe({
+    let email = this.email.value ?? ''
+    let password = this.password.value ?? ''
+
+    this.auth.login(email, password).subscribe({
       next: (res: any) => {
-        this.router.navigate(["/users/login"])
+        console.log(res.token)
+        localStorage.setItem('token', res.token)
+        this.router.navigate(["/home"])
       }, error: (err: any) => {
         console.log(err.error)
         this.errorText = err.error?.message

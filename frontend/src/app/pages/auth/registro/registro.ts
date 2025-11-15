@@ -33,7 +33,7 @@ export class Registro {
     this.auth.registrar(emailValue, passwordValue, userValue).subscribe({
       next: (res: any) => {
         console.log(res)
-        this.router.navigate(["/users/login"])
+        this.router.navigate(["/users/login"], { state: { msg: "Bem-vindo! Faça login para utilizar nossos serviços" }})
       }, error: (err: any) => {
         if (err.error.errors) {
           console.log(err.error.errors[0].message)

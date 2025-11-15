@@ -10,6 +10,6 @@ export const authGuard = () => {
     return true;
   }
   
-  router.navigate(["/users/login"])
+  router.navigate(["/users/login"], { state: { msg: "Faça login para utilizar nossos serviços!" }})
   return false;
 };
