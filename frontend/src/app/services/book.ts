@@ -25,12 +25,15 @@ export class Book {
     return this.http.put(`${this.url}/livros/${bookId}/deletar`, { bookId })
   }
 
-  exibirUltimoLivro(): Observable<any> {
-    return this.http.get<BookModel[]>(`${this.url}/livros/ultimoLivro`)
-  }
-
+  
   exibirLivros(): Observable<any> {
     return this.http.get<BookModel[]>(`${this.url}/livros/exibirLivros`)
+  }
+
+  pesquisarLivrosPublicos(valor: string): Observable<any> {
+    return this.http.get<BookModel[]>(`${this.url}/livros/public`, {
+      params: { query: valor }
+    })
   }
 
   pesquisarLivro(valor: string) {

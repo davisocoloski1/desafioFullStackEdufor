@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, Router } from "@angular/router";
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-top-navbar',
@@ -9,15 +10,22 @@ import { RouterLink, Router } from "@angular/router";
 })
 export class TopNavbar implements OnInit {
   router = inject(Router)
+  auth = inject(Auth)
 
   ngOnInit(): void {
     this.checkLinks()
+  }
+
+  get isLogged() {
+    return !!localStorage.getItem('token')
   }
 
   link1 = 'Login/Registro'
   link2 = 'Meus Livros'
   route1 = 'users/login'
   route2 = 'users/books'
+
+  logoutButton = 'Sair'
 
   checkLinks() {
     if (this.router.url.startsWith("/users/login") || 
@@ -32,10 +40,18 @@ export class TopNavbar implements OnInit {
       this.route1 = '/home'
       this.route2 = '/users/login'
     } else {
-        this.link1 = 'Login/Registro'
-        this.link2 = 'Meus Livros'
-        this.route1 = '/users/login'
-        this.route2 = '/users/books'
+      this.link1 = 'Meus Livros'
+      this.link2 = 'Login/Registro'
+      this.route1 = '/users/books'
+      this.route2 = '/users/login'
     }
+  }
+
+  logout() {
+    localStorage.removeItem('token')
+
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
   }
 }

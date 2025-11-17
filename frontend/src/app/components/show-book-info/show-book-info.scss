@@ -24,6 +24,8 @@
 }
 
 .book-card {
+  width: 22rem;       /* 👈 aumenta a largura */
+  max-width: 100%;    /* evita quebrar em telas pequenas */
   min-height: 180px;
   height: 100%;
   border-radius: 12px;
@@ -55,3 +57,14 @@
   }
 }
 
+.book-card {
+  width: 22rem;       // Aumenta a largura do card
+  max-width: 100%;    // Evita quebra em telas pequenas
+  
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}

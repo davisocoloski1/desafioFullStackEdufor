@@ -46,6 +46,19 @@ export default class LivrosController {
                     'isbn.unsigned': 'O ISBN deve ser um número positivo.'
                 }
              })
+
+            const existing = await Book.query()
+            .where('user_id', user.id)
+            .where('isbn', data.isbn)
+            .first()
+
+            if (existing) {
+                existing.deletedAt = null
+                existing.merge(data)
+                await existing.save()
+
+                return response.ok(existing)
+            }
     
             const newBook = await Book.create({
                 userId: user.id,
@@ -62,7 +75,7 @@ export default class LivrosController {
 
             if (error.code === '23505') {
                 return response.status(400).send({ message: 'Um livro com esse ISBN já foi cadastrado.'})
-            }
+            } else return error
         }
 
     }
@@ -98,27 +111,19 @@ export default class LivrosController {
         return books
     }
 
-    async showLast({ auth, response }: HttpContext) {
-        try {
-            const user = auth.user!
-            
-            const book = Book.query()
-            .where('user_id', user.id)
-            .whereNull('deleted_at')
-            .orderBy('id', 'desc')
-            .first()
-            return book;
-        } catch (error) {
-            console.error('Erro ao buscar o livro: ', error.message)
-
-            if (error.code === 'E_ROW_NOT_FOUND') {
-                return response.notFound({ message: 'Livro não encontrado' })
-            }
-
-            return response.internalServerError({
-                message: 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-            })
-        }
+    async showPublic({ request }: HttpContext) {
+        const { query } = request.qs()
+        const books = await Book.query()
+        .whereNull('deleted_at')
+        .select('titulo', 'autor', 'ano_lancamento', 'genero', 'isbn')
+        .if(query, (sub) => {
+            sub.whereILike('titulo', `%${query}%`)
+            .orWhereILike('autor', `%${query}%`)
+            .orWhereILike('genero', `%${query}%`)
+        })
+        .groupBy('titulo', 'autor', 'genero', 'ano_lancamento', 'isbn')
+        
+        return books
         
     }
 

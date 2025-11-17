@@ -11,10 +11,15 @@
         {{ link1 }}
       </a>
 
-      <a class="btn btn-primary" [routerLink]="route2">
-        {{ link2 }}
-      </a>
-
+      @if (isLogged) {
+        <a class="btn btn-primary" (click)="logout()">
+          {{ logoutButton }}
+        </a>
+      } @else {
+        <a class="btn btn-primary" [routerLink]="route2">
+          {{ link2 }}
+        </a>
+      }
     </div>
 
   </div>

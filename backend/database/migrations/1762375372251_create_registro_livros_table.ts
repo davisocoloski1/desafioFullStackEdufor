@@ -10,8 +10,9 @@ export default class extends BaseSchema {
       table.string('autor').notNullable()
       table.integer('ano_lancamento').notNullable()
       table.string('genero').notNullable()
-      table.bigInteger('isbn').notNullable().unique()
+      table.bigInteger('isbn').notNullable()
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.unique(['user_id', 'isbn'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

@@ -1,4 +1,4 @@
-import { Component, Input, Output, inject, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, inject, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { Book } from '../../services/book';
 import { BookModel } from '../../models/book-model';
 import { RouterLink, Router } from '@angular/router';
@@ -9,28 +9,20 @@ import { RouterLink, Router } from '@angular/router';
   templateUrl: './show-book-info.html',
   styleUrl: './show-book-info.scss',
 })
-export class ShowBookInfo implements OnChanges {
+export class ShowBookInfo implements OnInit {
+  @Input() isHome = false
   @Input() book!: BookModel;
   @Output() delete = new EventEmitter<number>();
   @Output() edit =  new EventEmitter<number>();
+  @Output() add = new EventEmitter<any>();
 
   bookService = inject(Book)
   router = inject(Router)
 
-  titulo = this.book?.titulo
-  autor = this.book?.autor
-  ano_lancamento = this.book?.ano_lancamento
-  genero = this.book?.genero
-  isbn = this.book?.isbn
-  
-  ngOnChanges() {
-    if (this.book) {
-      this.titulo = this.book.titulo
-      this.autor = this.book.autor
-      this.ano_lancamento = this.book.ano_lancamento
-      this.genero = this.book.genero
-      this.isbn = this.book.isbn
-    }
+  ngOnInit(): void {
+    if (this.router.url === '/home') {
+      this.isHome = true
+    } else this.isHome = false
   }
 
   isClicked  = false
@@ -48,5 +40,19 @@ export class ShowBookInfo implements OnChanges {
     this.edit.emit(this.book.id)
     this.bookService.setBook(this.book)
     this.router.navigate(["/books/edit"])
+  }
+
+  adicionarLivro() {
+    console.log('FILHO (REAL):', this.book)
+      
+    const bookToSend = {
+      titulo: this.book.titulo,
+      autor: this.book.autor,
+      genero: this.book.genero,
+      ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
+      isbn: Number(this.book.isbn)
+    }
+
+  this.add.emit(bookToSend)
   }
 }

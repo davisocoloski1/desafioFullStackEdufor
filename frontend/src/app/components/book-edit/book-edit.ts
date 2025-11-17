@@ -85,8 +85,8 @@ export class BookEdit implements OnInit {
 
   }
 
-  criarLivro( titulo: string , autor: string, ano_lancamento: number, genero: string, isbn: number) {
-    this.bookService.adicionarLivro({ titulo, autor, ano_lancamento: ano_lancamento, genero, isbn }).subscribe({
+  criarLivro( titulo: string , autor: string, anoLancamento: number, genero: string, isbn: number) {
+    this.bookService.adicionarLivro({ titulo, autor, ano_lancamento: anoLancamento, genero, isbn }).subscribe({
       next: (res: any) => {
         console.log(res)
         this.errorText = ''
@@ -103,8 +103,8 @@ export class BookEdit implements OnInit {
     })
   }
 
-  editarLivro(id: number, titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: number) {
-    this.bookService.editarLivro(id, { titulo, autor, ano_lancamento, genero, isbn }).subscribe({
+  editarLivro(id: number, titulo: string, autor: string, anoLancamento: number, genero: string, isbn: number) {
+    this.bookService.editarLivro(id, { titulo, autor, ano_lancamento: anoLancamento, genero, isbn }).subscribe({
       next: (res: any) => console.log(res),
       error: (err: any) => console.log(err.error)
     })

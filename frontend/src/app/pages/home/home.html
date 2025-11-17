@@ -8,12 +8,15 @@
         <div *ngFor="let book of books" class="col-12 col-sm-6 col-md-4 col-lg-3">
           <app-show-book-info
             [book]="book"
-            (edit)="editarLivro($event)"
-            (delete)="deletarLivro($event)">
-          </app-show-book-info>
+            [isHome]="true"
+            (add)="adicionarLivro($event)"></app-show-book-info>
         </div>
 
       </div>
+    </div>
+  } @else {
+    <div class="col-12">
+      <h3 *ngIf="warnText.length > 0" class="text-center text-muted fw-bold mb-4">{{ warnText }}</h3>
     </div>
   }
   <app-book-edit></app-book-edit>

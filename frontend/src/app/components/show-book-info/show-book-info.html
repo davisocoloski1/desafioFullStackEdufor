@@ -1,4 +1,4 @@
-<div class="card book-card shadow-sm p-3">
+<div class="card book-card shadow-sm p-3 mx-auto">
 
   <div class="d-flex justify-content-between align-items-start mb-3">
 
@@ -8,11 +8,16 @@
       <button class="btn btn-sm btn-light border" (click)="onClick()">⋮</button>
 
       @if (isClicked) {
-        <div class="position-absolute bg-white border rounded shadow p-2"
-             style="right: 0; top: 2.2rem; z-index: 100;">
-          <button class="dropdown-item" (click)="editarLivro()">Editar</button>
-          <button class="dropdown-item text-danger" (click)="deletarLivro()">Deletar</button>
-        </div>
+        @if (!isHome) {
+          <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
+            <button class="dropdown-item" (click)="editarLivro()">Editar</button>
+            <button class="dropdown-item text-danger" (click)="deletarLivro()">Deletar</button>
+          </div>
+        } @else {
+          <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
+            <button class="dropdown-item" (click)="adicionarLivro()">Adicionar</button>
+          </div>
+        }
       }
     </div>
 
@@ -25,7 +30,7 @@
     </div>
 
     <div class="col-6">
-      <p class="mb-1"><strong>Ano:</strong> {{ book.ano_lancamento }}</p>
+      <p class="mb-1"><strong>Ano:</strong> {{ book.anoLancamento }}</p>
       <p class="mb-1"><strong>ISBN:</strong> {{ book.isbn }}</p>
     </div>
   </div>

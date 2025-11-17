@@ -6,10 +6,12 @@ import { BookModel } from '../../models/book-model';
 import { Book } from '../../services/book';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
+import { PizzaGrapich } from "./pizza-grapich/pizza-grapich";
+import { BarGrapich } from "./bar-graphic/bar-graphic";
 
 @Component({
   selector: 'app-user-books',
-  imports: [TopNavbar, ShowBookInfo, CommonModule, RouterLink],
+  imports: [TopNavbar, ShowBookInfo, CommonModule, RouterLink, PizzaGrapich, BarGrapich],
   templateUrl: './user-books.html',
   styleUrl: './user-books.scss',
 })

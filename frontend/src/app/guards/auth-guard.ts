@@ -6,10 +6,10 @@ export const authGuard = () => {
   const router = inject(Router)
   const token = localStorage.getItem('token')
 
-  if (token) {
-    return true;
+  if (!token) {
+    router.navigate(["/users/login"], { state: { msg: "Faça login para utilizar nossos serviços!" }})
+    return false
   }
   
-  router.navigate(["/users/login"], { state: { msg: "Faça login para utilizar nossos serviços!" }})
-  return false;
+  return true
 };

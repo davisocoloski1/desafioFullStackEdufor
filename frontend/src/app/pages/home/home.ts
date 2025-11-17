@@ -17,6 +17,7 @@ import { ɵInternalFormsSharedModule } from "@angular/forms";
 export class Home {
   books: BookModel[] = []
   isEditing = false
+  warnText = ''
 
   bookService = inject(Book)
   
@@ -26,15 +27,43 @@ export class Home {
       error: (err: any) => console.log(err.error)
     })
   }
-  editarLivro(id: number) {
-    // editar
-  }
 
   pesquisarLivro(valor: string) {
-    this.bookService.pesquisarLivro(valor).subscribe({
+    this.bookService.pesquisarLivrosPublicos(valor).subscribe({
       next: (res: any) => {
         this.books = res
         console.log(this.books)
+
+        if (this.books.length === 0) {
+          this.warnText = 'Nenhum livro encontrado.'
+        }
+      }, error: () => {
+        this.warnText = 'Erro ao procurar livros. Tente novamente.'
+      }
+    })
+  }
+
+  adicionarLivro(book: { titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: number}) {
+    console.log('LIVRO RECEBIDO NO PAI', book)
+
+    if (!book) {
+      console.warn('BOOK VEIO null/undefined NO EVENTO')
+      return
+    }
+
+    const payload = {
+      titulo: book.titulo,
+      autor: book.autor,
+      ano_lancamento: Number(book.ano_lancamento),
+      genero: book.genero,
+      isbn: Number(book.isbn)
+    }
+
+    this.bookService.adicionarLivro({ titulo: book.titulo, autor: book.autor, ano_lancamento: book.ano_lancamento, genero: book.genero, isbn: Number(book.isbn)}).subscribe({
+      next: (res: any) => {
+        console.log(res)
+      }, error: (err: any) => {
+        console.log(err)
       }
     })
   }
