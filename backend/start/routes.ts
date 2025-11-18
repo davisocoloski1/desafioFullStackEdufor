@@ -19,6 +19,10 @@ router.group(() => {
   router.get('exibirLivros', [() => import('#controllers/livros_controller'), 'index'])
 
   router.get('buscar', [() => import('#controllers/livros_controller'), 'show'])
+
+  router.get('observarLivro', [() => import('#controllers/livros_controller'), 'showSingle'])
 }).prefix('api/v1/livros').use(middleware.auth())
 
 router.get('api/v1/livros/public', [() => import('#controllers/livros_controller'), 'showPublic'])
+
+router.get('api/v1/livros/livrosPublicos', [() => import('#controllers/livros_controller'), 'indexPublic'])

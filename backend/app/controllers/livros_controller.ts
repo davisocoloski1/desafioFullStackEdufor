@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Book from '#models/book'
 import { DateTime } from 'luxon'
 import { schema, rules } from '@adonisjs/validator'
+import db from '@adonisjs/lucid/services/db'
 
 export default class LivrosController {
     async store({ auth, request, response }: HttpContext) {
@@ -74,7 +75,7 @@ export default class LivrosController {
             console.log('ERRO CAPTURADO')
 
             if (error.code === '23505') {
-                return response.status(400).send({ message: 'Um livro com esse ISBN já foi cadastrado.'})
+                return response.status(400).send({ message: 'Você já cadastrou um livro com esse ISBN.' })
             } else return error
         }
 
@@ -111,20 +112,59 @@ export default class LivrosController {
         return books
     }
 
-    async showPublic({ request }: HttpContext) {
-        const { query } = request.qs()
+    async indexPublic({ request }: HttpContext) {
+        const { page = 1, limit = 10} = request.qs()
+
         const books = await Book.query()
         .whereNull('deleted_at')
-        .select('titulo', 'autor', 'ano_lancamento', 'genero', 'isbn')
-        .if(query, (sub) => {
-            sub.whereILike('titulo', `%${query}%`)
-            .orWhereILike('autor', `%${query}%`)
-            .orWhereILike('genero', `%${query}%`)
-        })
-        .groupBy('titulo', 'autor', 'genero', 'ano_lancamento', 'isbn')
-        
+        .select(
+            db.rawQuery('MIN(id) AS id').knexQuery,
+            'titulo',
+            'autor',
+            'ano_lancamento',
+            'genero',
+            'isbn'
+        )
+        .groupBy('titulo', 'autor', 'ano_lancamento', 'genero', 'isbn')
+        .paginate(page, limit)
+
         return books
-        
+    }
+
+    async showSingle({ auth, request }: HttpContext) {
+        const { isbn } = request.qs()
+        const user = auth.user!
+
+        const books = await Book.query()
+        .whereNull('deleted_at')
+        .where('user_id', user.id)
+        .whereILike('isbn', isbn)
+        .first()
+
+        return books
+    }
+
+    async showPublic({ request }: HttpContext) {
+        const { query, type } = request.qs()
+        const allowedFilters = ['titulo', 'autor', 'genero']
+
+        const books = Book.query()
+        .whereNull('deleted_at')
+        .select('titulo', 'autor', 'genero', 'ano_lancamento', 'isbn')
+
+        if (query) {
+            if (!type || type === 'buscaEspecifica') {
+                books.where((sub) => {
+                    sub.whereILike('titulo', `%${query}%`)
+                    .orWhereILike('autor', `%${query}%`)
+                    .orWhereILike('genero', `%${query}%`)
+                })
+            } else if (allowedFilters.includes(type)) {
+                books.whereILike(type, `%${query}%`)
+            }
+        }
+
+        return await books
     }
 
     async show({ request, auth }: HttpContext) {

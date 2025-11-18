@@ -33,5 +33,10 @@ export const routes: Routes = [
         path: "books/edit",
         component: EditBookPage,
         canActivate: [authGuard]
+    },
+    {
+        path: "books/add",
+        component: EditBookPage,
+        canActivate: [authGuard]
     }
 ];

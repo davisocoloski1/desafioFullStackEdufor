@@ -22,6 +22,7 @@ export class BookEdit implements OnInit {
   genero = new FormControl('')
   isbn = new FormControl('')
   
+  successText = ''
   errorText = ''
   actionButton = 'Adicionar'
   tituloPlaceholder = 'Título'
@@ -73,7 +74,7 @@ export class BookEdit implements OnInit {
     const id = this.book?.id
 
     
-    if (this.allowed && this.router.url === "/home") {
+    if (this.allowed && this.router.url === "/books/add") {
       this.criarLivro(titulo, autor, ano, genero, isbn)
     } else if (this.allowed && this.router.url === "/books/edit") {
       if (id === undefined) {
@@ -89,9 +90,11 @@ export class BookEdit implements OnInit {
     this.bookService.adicionarLivro({ titulo, autor, ano_lancamento: anoLancamento, genero, isbn }).subscribe({
       next: (res: any) => {
         console.log(res)
+        this.successText = 'Livro adicionado! Verifique na aba "Meus Livros" ou no Menu Principal'
         this.errorText = ''
       },
       error: (err: any) => {
+        this.successText = ''
         if (err.error.errors) {
           console.log(err.error?.errors[0].message)
           this.errorText = err.error?.errors[0].message

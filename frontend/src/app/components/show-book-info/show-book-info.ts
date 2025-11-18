@@ -2,14 +2,15 @@ import { Component, Input, Output, inject, EventEmitter, OnChanges, SimpleChange
 import { Book } from '../../services/book';
 import { BookModel } from '../../models/book-model';
 import { RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-show-book-info',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './show-book-info.html',
   styleUrl: './show-book-info.scss',
 })
-export class ShowBookInfo implements OnInit {
+export class ShowBookInfo {
   @Input() isHome = false
   @Input() book!: BookModel;
   @Output() delete = new EventEmitter<number>();
@@ -19,13 +20,8 @@ export class ShowBookInfo implements OnInit {
   bookService = inject(Book)
   router = inject(Router)
 
-  ngOnInit(): void {
-    if (this.router.url === '/home') {
-      this.isHome = true
-    } else this.isHome = false
-  }
-
   isClicked  = false
+  hasBook = false
 
   onClick() {
     this.isClicked = !this.isClicked
@@ -36,6 +32,7 @@ export class ShowBookInfo implements OnInit {
   }
 
   editarLivro() {
+    console.log(this.book)
     console.log(this.book.id)
     this.edit.emit(this.book.id)
     this.bookService.setBook(this.book)
@@ -43,16 +40,29 @@ export class ShowBookInfo implements OnInit {
   }
 
   adicionarLivro() {
-    console.log('FILHO (REAL):', this.book)
-      
-    const bookToSend = {
-      titulo: this.book.titulo,
-      autor: this.book.autor,
-      genero: this.book.genero,
-      ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
-      isbn: Number(this.book.isbn)
-    }
+    const isbn = this.book.isbn.toString()
 
-  this.add.emit(bookToSend)
+    this.bookService.observarLivro(isbn).subscribe({
+      next: (res: any) => {
+        if (res) {
+          this.hasBook = true;
+          return;
+        }
+
+        this.hasBook = false
+        const bookToSend = {
+          titulo: this.book.titulo,
+          autor: this.book.autor,
+          genero: this.book.genero,
+          ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
+          isbn: Number(this.book.isbn)
+        }
+
+        this.add.emit(bookToSend);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 }

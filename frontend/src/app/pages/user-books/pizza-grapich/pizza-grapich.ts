@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Book } from '../../../services/book';
 import { ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pizza-grapich',
@@ -12,6 +13,7 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export class PizzaGrapich implements OnInit {
   bookService = inject(Book)
+  router = inject(Router)
 
   pieChartType: ChartType = 'pie';
 
@@ -21,21 +23,41 @@ export class PizzaGrapich implements OnInit {
   };
 
   ngOnInit(): void {
-    this.bookService.exibirLivros().subscribe((res: any) => {
-      const books: {
-        genero: string;
-      }[] = res.data
-
-      const genresCount: Record<string, number> = {};
-
-      books.forEach((book) => {
-        genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
+    if (this.router.url === '/users/books') {
+      this.bookService.exibirLivros().subscribe((res: any) => {
+        const books: {
+          genero: string;
+        }[] = res.data
+  
+        const genresCount: Record<string, number> = {};
+  
+        books.forEach((book) => {
+          genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
+        });
+  
+        this.pieData = {
+          labels: Object.keys(genresCount),
+          datasets: [{ data: Object.values(genresCount) }]
+        };
       });
+    } else {
+        this.bookService.exibirPublicos().subscribe((res: any) => {
+          const books: {
+            genero: string;
+          }[] = res.data
+    
+          const genresCount: Record<string, number> = {};
+    
+          books.forEach((book) => {
+            genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
+          });
+    
+          this.pieData = {
+            labels: Object.keys(genresCount),
+            datasets: [{ data: Object.values(genresCount) }]
+          };
+        });
+    }
 
-      this.pieData = {
-        labels: Object.keys(genresCount),
-        datasets: [{ data: Object.values(genresCount) }]
-      };
-    });
   }
 }

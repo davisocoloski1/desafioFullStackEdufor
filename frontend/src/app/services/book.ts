@@ -30,15 +30,28 @@ export class Book {
     return this.http.get<BookModel[]>(`${this.url}/livros/exibirLivros`)
   }
 
-  pesquisarLivrosPublicos(valor: string): Observable<any> {
+  exibirPublicos(): Observable<any> {
+    return this.http.get<BookModel[]>(`${this.url}/livros/livrosPublicos`)
+  }
+
+  pesquisarLivrosPublicos(valor: string, filtro: string): Observable<any> {
     return this.http.get<BookModel[]>(`${this.url}/livros/public`, {
-      params: { query: valor }
+      params: {
+        query: valor,
+        type: filtro
+      }
     })
   }
 
   pesquisarLivro(valor: string) {
     return this.http.get<BookModel[]>(`${this.url}/livros/buscar`, {
       params: { query: valor }
+    })
+  }
+
+  observarLivro(isbn: string) {
+    return this.http.get(`${this.url}/livros/observarLivro`, {
+      params: { isbn }
     })
   }
 

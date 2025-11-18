@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Book } from '../../../services/book';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bar-grapich',
@@ -13,6 +14,7 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
 export class BarGrapich implements OnInit {
 
   bookService = inject(Book)
+  router = inject(Router)
 
   barData: ChartData<'bar'> = {
     labels: [],
@@ -36,23 +38,45 @@ export class BarGrapich implements OnInit {
   barChartType: 'bar' = 'bar';
 
   ngOnInit(): void {
-    this.bookService.exibirLivros().subscribe((res: any) => {
-      const yearsCount: Record<number, number> = {};
-
-      res.data.forEach((book: any) => {
-        const year = book.anoLancamento;
-        yearsCount[year] = (yearsCount[year] || 0) + 1;
+    if (this.router.url === '/users/books') {
+      this.bookService.exibirLivros().subscribe((res: any) => {
+        const yearsCount: Record<number, number> = {};
+  
+        res.data.forEach((book: any) => {
+          const year = book.anoLancamento;
+          yearsCount[year] = (yearsCount[year] || 0) + 1;
+        });
+  
+        this.barData = {
+          labels: Object.keys(yearsCount),
+          datasets: [
+            {
+              label: 'Livros por Ano',
+              data: Object.values(yearsCount),
+            }
+          ]
+        };
       });
+    } else {
+        this.bookService.exibirPublicos().subscribe((res: any) => {
+        const yearsCount: Record<number, number> = {};
+  
+        res.data.forEach((book: any) => {
+          const year = book.anoLancamento;
+          yearsCount[year] = (yearsCount[year] || 0) + 1;
+        });
+  
+        this.barData = {
+          labels: Object.keys(yearsCount),
+          datasets: [
+            {
+              label: 'Livros por Ano',
+              data: Object.values(yearsCount),
+            }
+          ]
+        };
+      });
+    }
 
-      this.barData = {
-        labels: Object.keys(yearsCount),
-        datasets: [
-          {
-            label: 'Livros por Ano',
-            data: Object.values(yearsCount),
-          }
-        ]
-      };
-    });
   }
 }

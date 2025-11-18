@@ -1,25 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TopNavbar } from "../../components/top-navbar/top-navbar";
-import { BookEdit } from "../../components/book-edit/book-edit";
 import { ShowBookInfo } from "../../components/show-book-info/show-book-info";
 import { CommonModule } from '@angular/common';
 import { Book } from '../../services/book';
 import { BookModel } from '../../models/book-model';
 import { SearchBook } from "./search-book/search-book";
 import { ɵInternalFormsSharedModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { BarGrapich } from "../user-books/bar-graphic/bar-graphic";
+import { PizzaGrapich } from "../user-books/pizza-grapich/pizza-grapich";
 
 @Component({
   selector: 'app-home',
-  imports: [TopNavbar, BookEdit, ShowBookInfo, CommonModule, SearchBook, ɵInternalFormsSharedModule],
+  imports: [TopNavbar, ShowBookInfo, CommonModule, SearchBook, ɵInternalFormsSharedModule, RouterLink, BarGrapich, PizzaGrapich],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements OnInit {
   books: BookModel[] = []
   isEditing = false
   warnText = ''
+  filtro = 'Nenhum'
 
   bookService = inject(Book)
+
+  get isLogged() {
+    return !!localStorage.getItem('token')
+  }
+
+  ngOnInit(): void {
+    this.exibirLivros()
+  }
+
+  exibirLivros() {
+    this.bookService.exibirPublicos().subscribe({
+      next: (res: any) => {
+        console.log(res.data)
+        this.books = res.data
+      }, error: (err: any) => {
+        console.log(err.error)
+        this.warnText = err.error.message
+      }
+    })
+  }
   
   deletarLivro(id: number) {
     this.bookService.deletarLivro(id).subscribe({
@@ -29,7 +52,7 @@ export class Home {
   }
 
   pesquisarLivro(valor: string) {
-    this.bookService.pesquisarLivrosPublicos(valor).subscribe({
+    this.bookService.pesquisarLivrosPublicos(valor, this.filtro).subscribe({
       next: (res: any) => {
         this.books = res
         console.log(this.books)
@@ -66,5 +89,9 @@ export class Home {
         console.log(err)
       }
     })
+  }
+
+  editarLivro(id: number) {
+    console.log(id)
   }
 }

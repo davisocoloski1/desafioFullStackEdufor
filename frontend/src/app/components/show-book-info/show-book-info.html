@@ -8,16 +8,11 @@
       <button class="btn btn-sm btn-light border" (click)="onClick()">⋮</button>
 
       @if (isClicked) {
-        @if (!isHome) {
           <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
             <button class="dropdown-item" (click)="editarLivro()">Editar</button>
             <button class="dropdown-item text-danger" (click)="deletarLivro()">Deletar</button>
-          </div>
-        } @else {
-          <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
             <button class="dropdown-item" (click)="adicionarLivro()">Adicionar</button>
           </div>
-        }
       }
     </div>
 

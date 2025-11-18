@@ -1,22 +1,23 @@
-FROM node:20-alpine AS builder
-
+FROM node:20-alpine AS base
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+FROM base AS production-deps
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
+FROM base AS app_build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
+RUN node ace build
 
-RUN npm run build
-
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.env ./.env
-
+FROM base AS production
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 EXPOSE 3333
 
-CMD ["node", "build/server.js"]
+COPY --from=production-deps /app/node_modules ./node_modules
+COPY --from=app_build /app/build /app
+
+CMD ["node", "./bin/server.js"]

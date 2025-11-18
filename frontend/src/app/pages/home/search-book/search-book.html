@@ -3,17 +3,35 @@
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
 
-      <div class="d-flex gap-3 mb-3 search-wrapper">
-
-        <input type="text"
-               class="form-control form-control-lg slide-placeholder"
-               [placeholder]="searchBarPlaceholder" [formControl]="searchBar">
-
-        <button class="btn btn-primary btn-lg px-4" (click)="emitirLivro()">
-          Buscar
-        </button>
-
+      @if (!buscaFiltrada) {
+        <div class="d-flex gap-3 mb-3 search-wrapper">
+          <input type="text"
+                 class="form-control form-control-lg slide-placeholder"
+                 [placeholder]="searchBarPlaceholder"
+                 [formControl]="searchBar">
+  
+          <button class="btn btn-primary btn-lg px-4" (click)="emitirLivro()">
+            Buscar
+          </button>
+        </div>
+      } @else {
+        
+      }
+      <div class="d-flex gap-3 mb-3 align-items-center justify-content-center">
+        <h5 class="m-0">Filtro:</h5>
+        <select name="specificSearch"
+                class="form-select form-select-lg w-auto"
+                [formControl]="filtroBar"
+                (change)="checarFiltros()">
+          <option value="" selected>Nenhum</option>
+          <option value="buscaEspecifica">Busca específica</option>
+          <option value="titulo">Título</option>
+          <option value="autor">Autor</option>
+          <option value="genero">Gênero</option>
+        </select>
       </div>
+
+
 
     </div>
   </div>
