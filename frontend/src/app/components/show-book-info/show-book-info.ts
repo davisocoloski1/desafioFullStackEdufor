@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './show-book-info.html',
   styleUrl: './show-book-info.scss',
 })
-export class ShowBookInfo {
+export class ShowBookInfo implements OnInit {
   @Input() isHome = false
   @Input() book!: BookModel;
   @Output() delete = new EventEmitter<number>();
@@ -23,12 +23,29 @@ export class ShowBookInfo {
   isClicked  = false
   hasBook = false
 
+  get isLogged() {
+    return !!localStorage.getItem('token')
+  }
+
+  ngOnInit(): void {
+    const isbn = String(this.book.isbn)
+
+    this.bookService.observarLivro(isbn).subscribe({
+      next: (res: any) => {
+        this.hasBook = !!res
+      }, error: () => this.hasBook = false
+    })
+  }
+  
   onClick() {
     this.isClicked = !this.isClicked
   }
 
   deletarLivro() {
     this.delete.emit(this.book.id);
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   }
 
   editarLivro() {
@@ -40,29 +57,16 @@ export class ShowBookInfo {
   }
 
   adicionarLivro() {
-    const isbn = this.book.isbn.toString()
+    if (this.hasBook) return
 
-    this.bookService.observarLivro(isbn).subscribe({
-      next: (res: any) => {
-        if (res) {
-          this.hasBook = true;
-          return;
-        }
-
-        this.hasBook = false
-        const bookToSend = {
-          titulo: this.book.titulo,
-          autor: this.book.autor,
-          genero: this.book.genero,
-          ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
-          isbn: Number(this.book.isbn)
-        }
-
-        this.add.emit(bookToSend);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    const bookToSend = {
+      titulo: this.book.titulo,
+      autor: this.book.autor,
+      genero: this.book.genero,
+      ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
+      isbn: Number(this.book.isbn)
+    }
+    
+    this.add.emit(bookToSend)
   }
 }

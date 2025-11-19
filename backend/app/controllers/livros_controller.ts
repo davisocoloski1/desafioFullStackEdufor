@@ -138,7 +138,7 @@ export default class LivrosController {
         const books = await Book.query()
         .whereNull('deleted_at')
         .where('user_id', user.id)
-        .whereILike('isbn', isbn)
+        .whereRaw('CAST(isbn AS TEXT) ILIKE ?', [`%${isbn}%`])
         .first()
 
         return books

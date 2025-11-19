@@ -20,7 +20,7 @@ export class Home implements OnInit {
   books: BookModel[] = []
   isEditing = false
   warnText = ''
-  filtro = 'Nenhum'
+  filtro = ''
 
   bookService = inject(Book)
 

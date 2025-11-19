@@ -4,17 +4,22 @@
 
     <h5 class="fw-bold m-0 book-title">{{ book.titulo }}</h5>
 
-    <div class="position-relative">
-      <button class="btn btn-sm btn-light border" (click)="onClick()">⋮</button>
-
-      @if (isClicked) {
-          <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
-            <button class="dropdown-item" (click)="editarLivro()">Editar</button>
-            <button class="dropdown-item text-danger" (click)="deletarLivro()">Deletar</button>
-            <button class="dropdown-item" (click)="adicionarLivro()">Adicionar</button>
-          </div>
-      }
-    </div>
+    @if (isLogged) {
+      <div class="position-relative">
+        <button class="btn btn-sm btn-light border" (click)="onClick()">⋮</button>
+  
+        @if (isClicked) {
+            <div class="position-absolute bg-white border rounded shadow p-2" style="right: 0; top: 2.2rem; z-index: 100;">
+              @if (hasBook) {
+                <button class="dropdown-item" (click)="editarLivro()">Editar</button>
+                <button class="dropdown-item text-danger" (click)="deletarLivro()">Deletar</button>
+              } @else {
+                <button class="dropdown-item" (click)="adicionarLivro()">Adicionar</button>
+              }
+            </div>
+        }
+      </div>
+    }
 
   </div>
 
