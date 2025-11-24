@@ -32,7 +32,7 @@ export class BookEdit implements OnInit {
   isbnPlaceholder = 'ISBN'
 
   ngOnInit(): void {
-    if (this.router.url === "/home") this.actionButton = 'Adicionar'  
+    if (this.router.url === "") this.actionButton = 'Adicionar'  
     if (this.router.url === "/books/edit") {
       this.actionButton = 'Editar' 
       this.isbnPlaceholder = String(this.book?.isbn ?? 'Inválido')

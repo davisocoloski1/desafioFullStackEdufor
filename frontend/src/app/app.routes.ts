@@ -5,12 +5,12 @@ import { UserBooks } from './pages/user-books/user-books';
 import { Registro } from './pages/auth/registro/registro';
 import { EditBookPage } from './pages/edit-book-page/edit-book-page';
 import { authGuard } from './guards/auth-guard';
+import { Load } from './pages/load/load';
 
 export const routes: Routes = [
     {
-        path: "/",
-        pathMatch: "full",
-        redirectTo: "home"
+        path: "",
+        component: Load
     },
     {
         path: "home",

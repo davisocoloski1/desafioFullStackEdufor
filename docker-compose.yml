@@ -17,7 +17,7 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - "8080:80"
+      - "80:80"
     networks:
       - app_network
 
@@ -27,7 +27,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 102030  # ajuste se o seu .env for diferente
+      POSTGRES_PASSWORD: 102030
       POSTGRES_DB: livros
     ports:
       - "5432:5432"
