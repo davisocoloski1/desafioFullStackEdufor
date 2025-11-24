@@ -19,7 +19,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Run Docker
 
-With your Docker Desktop, run `docker compose up --build`
+With your Docker Desktop opened, run `docker compose up --build`
 
 This command will run and install everything it needs to work
 After this, you can access the website at localhost:80
