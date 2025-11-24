@@ -2,6 +2,8 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class Book extends BaseModel {
+  public static table = 'books'
+
   @column({ isPrimary: true })
   declare id: number
 
