@@ -1,8 +1,10 @@
-<div class="d-flex justify-content-center mt-5">
-  <canvas
-    baseChart
-    [data]="barData"
-    [options]="barOptions"
-    [type]="barChartType">
-  </canvas>
-</div>
+@if (showChart) {
+  <div class="d-flex justify-content-center mt-5">
+    <canvas
+      baseChart
+      [data]="barData"
+      [options]="barOptions"
+      [type]="barChartType">
+    </canvas>
+  </div>
+}

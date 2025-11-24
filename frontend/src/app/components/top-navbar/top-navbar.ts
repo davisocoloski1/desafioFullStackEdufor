@@ -39,7 +39,7 @@ export class TopNavbar implements OnInit {
       this.link2 = 'Login/Registro'
       this.route1 = '/home'
       this.route2 = '/users/login'
-    } else {
+    } else if (this.router.url.startsWith("/home")) {
       this.link1 = 'Meus Livros'
       this.link2 = 'Login/Registro'
       this.route1 = '/users/books'

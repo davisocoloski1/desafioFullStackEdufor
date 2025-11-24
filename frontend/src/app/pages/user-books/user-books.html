@@ -8,7 +8,7 @@
     
     <div *ngIf="books.length === 0" class="col-12 d-flex flex-column align-items-center my-5 text-center">
       <h2 class="text-muted fw-bold mb-2">Você não possui nenhum livro registrado.</h2>
-      <h3 class="text-secondary">Adicione um livro <a routerLink="/home" class="add-link">aqui</a>.</h3>
+      <h3 class="text-secondary">Adicione um livro <a routerLink="/books/add" class="add-link">aqui</a>.</h3>
     </div>
     
     <div *ngFor="let book of books" class="col-12 col-sm-6 col-md-6 col-lg-4">
