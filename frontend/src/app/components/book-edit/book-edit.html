@@ -9,31 +9,31 @@
         <div class="mb-3">
           <label class="form-label">Título</label>
           <input type="text" class="form-control form-control-lg"
-                 [placeholder]="tituloPlaceholder" [formControl]="titulo">
+                 placeholder="Título" [formControl]="titulo">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Autor</label>
           <input type="text" class="form-control form-control-lg"
-                 [placeholder]="autorPlaceholder" [formControl]="autor">
+                 placeholder="Autor" [formControl]="autor">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Ano</label>
           <input type="text" class="form-control form-control-lg"
-                 [placeholder]="anoPlaceholder" [formControl]="ano">
+                 placeholder="Ano de lançamento" [formControl]="ano">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Gênero</label>
           <input type="text" class="form-control form-control-lg"
-                 [placeholder]="generoPlaceholder" [formControl]="genero">
+                 placeholder="Gênero" [formControl]="genero">
         </div>
 
         <div class="mb-3">
           <label class="form-label">ISBN</label>
           <input type="text" class="form-control form-control-lg"
-                 [placeholder]="isbnPlaceholder" [formControl]="isbn">
+                 placeholder="ISBN" [formControl]="isbn">
         </div>
 
         @if (errorText) {
@@ -47,7 +47,7 @@
         }
 
         <button class="btn btn-primary btn-lg w-100 mb-2"
-                (click)="checkNullValues(); enviarLivro();">
+                (click)="enviarLivro();">
           {{ actionButton }}
         </button>
 
