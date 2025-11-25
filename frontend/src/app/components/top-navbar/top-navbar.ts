@@ -13,6 +13,7 @@ export class TopNavbar implements OnInit {
   auth = inject(Auth)
 
   ngOnInit(): void {
+    this.isLogged
     this.checkLinks()
   }
 

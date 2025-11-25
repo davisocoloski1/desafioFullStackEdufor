@@ -11,6 +11,10 @@ export class Load implements OnInit {
   router = inject(Router)
 
   ngOnInit(): void {
-    this.router.navigate(["home"])
+    localStorage.removeItem('token')
+
+    setTimeout(() => {
+      this.router.navigate(["home"])
+    }, 1000)
   }
 }
