@@ -4,5 +4,5 @@ export interface BookModel {
   autor: string;
   anoLancamento: number;
   genero: string;
-  isbn: number;
+  isbn: string;
 }

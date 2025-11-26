@@ -66,7 +66,7 @@ export class Home implements OnInit {
     })
   }
 
-  adicionarLivro(book: { titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: number}) {
+  adicionarLivro(book: { titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: string}) {
     console.log('LIVRO RECEBIDO NO PAI', book)
 
     if (!book) {
@@ -79,10 +79,10 @@ export class Home implements OnInit {
       autor: book.autor,
       ano_lancamento: Number(book.ano_lancamento),
       genero: book.genero,
-      isbn: Number(book.isbn)
+      isbn: book.isbn
     }
 
-    this.bookService.adicionarLivro({ titulo: book.titulo, autor: book.autor, ano_lancamento: book.ano_lancamento, genero: book.genero, isbn: Number(book.isbn)}).subscribe({
+    this.bookService.adicionarLivro({ titulo: book.titulo, autor: book.autor, ano_lancamento: book.ano_lancamento, genero: book.genero, isbn: book.isbn}).subscribe({
       next: (res: any) => {
         console.log(res)
       }, error: (err: any) => {

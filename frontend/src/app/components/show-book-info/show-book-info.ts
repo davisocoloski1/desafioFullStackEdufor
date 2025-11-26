@@ -28,7 +28,7 @@ export class ShowBookInfo implements OnInit {
   }
 
   ngOnInit(): void {
-    const isbn = String(this.book.isbn)
+    const isbn = this.book.isbn
 
     this.bookService.observarLivro(isbn).subscribe({
       next: (res: any) => {
@@ -64,7 +64,7 @@ export class ShowBookInfo implements OnInit {
       autor: this.book.autor,
       genero: this.book.genero,
       ano_lancamento: this.book.anoLancamento ?? (this.book as any).anoLancamento,
-      isbn: Number(this.book.isbn)
+      isbn: this.book.isbn
     }
     
     this.add.emit(bookToSend)

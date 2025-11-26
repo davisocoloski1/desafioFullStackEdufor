@@ -13,11 +13,11 @@ export class Book {
 
   constructor(private http: HttpClient) {}
 
-  adicionarLivro(data: {titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: number}): Observable<any> {
+  adicionarLivro(data: {titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: string}): Observable<any> {
     return this.http.post(`${this.url}/livros/adicionar`, data)
   }
 
-  editarLivro(bookId: number, data: {titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: number}): Observable<any> {
+  editarLivro(bookId: number, data: {titulo: string, autor: string, ano_lancamento: number, genero: string, isbn: string}): Observable<any> {
     return this.http.put(`${this.url}/livros/${bookId}/editar`, data)
   }
 

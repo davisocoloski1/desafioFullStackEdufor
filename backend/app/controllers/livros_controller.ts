@@ -6,7 +6,6 @@ import db from '@adonisjs/lucid/services/db'
 
 export default class LivrosController {
     async store({ auth, request, response }: HttpContext) {
-        try {
             const user = auth.user!
             
             const bookSchema = schema.create({
@@ -23,10 +22,11 @@ export default class LivrosController {
                 genero: schema.string({}, [
                     rules.required()
                 ]),
-                isbn: schema.number([
+                isbn: schema.string({}, [
                     rules.required(),
-                    rules.range(1000000000000, 9999999999999),
-                    rules.unsigned()
+                    rules.regex(/^\d{13}$/),
+                    rules.minLength(13),
+                    rules.maxLength(13)
                 ])
     
             })
@@ -43,24 +43,26 @@ export default class LivrosController {
                     'genero.required': 'O campo "gênero" é obrigatório.',
     
                     'isbn.required': 'O campo "isbn" é obrigatório.',
-                    'isbn.range': 'O ISBN deve ser um número de 13 dígitos.',
-                    'isbn.unsigned': 'O ISBN deve ser um número positivo.'
+                    'isbn.regex': 'O ISBN deve conter exatamente 13 dígitos numéricos.',
+                    'isbn.minLength': 'O ISBN deve conter exatamente 13 dígitos.',
+                    'isbn.maxLength': 'O ISBN deve conter exatamente 13 dígitos.'
                 }
              })
 
-            const existing = await Book.query()
-            .where('user_id', user.id)
-            .where('isbn', data.isbn)
-            .first()
+            // const existing = await Book.query()
+            // .where('user_id', user.id)
+            // .where('isbn', data.isbn)
+            // .first()
 
-            if (existing) {
-                existing.deletedAt = null
-                existing.merge(data)
-                await existing.save()
+            // if (existing) {
+            //     existing.deletedAt = null
+            //     existing.merge(data)
+            //     await existing.save()
 
-                return response.ok(existing)
-            }
+            //     return response.ok(existing)
+            // }
     
+        try {
             const newBook = await Book.create({
                 userId: user.id,
                 titulo: data.titulo,
@@ -76,7 +78,9 @@ export default class LivrosController {
 
             if (error.code === '23505') {
                 return response.status(400).send({ message: 'Você já cadastrou um livro com esse ISBN.' })
-            } else return error
+            } 
+            
+            throw error
         }
 
     }

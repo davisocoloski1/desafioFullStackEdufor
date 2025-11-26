@@ -16,5 +16,4 @@ WORKDIR /app/build
 
 EXPOSE 3333
 
-# Comando final: roda migrations + inicia o servidor
 CMD ["sh", "-c", "node ace migration:run --force && node bin/server.js"]

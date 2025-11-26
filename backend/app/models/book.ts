@@ -20,7 +20,7 @@ export default class Book extends BaseModel {
   declare genero: string
 
   @column()
-  declare isbn: number
+  declare isbn: string
 
   @column()
   declare userId: number

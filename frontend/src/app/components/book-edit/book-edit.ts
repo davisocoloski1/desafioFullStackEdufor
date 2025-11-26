@@ -37,7 +37,7 @@ export class BookEdit implements OnInit {
       this.ano.setValue(String(this.book.anoLancamento ?? ''));
       this.genero.setValue(this.book.genero ?? '');
       this.isbn.setValue(String(this.book.isbn ?? ''));
-      this.isbn.disable(); // ISBN não deve ser editado
+      this.isbn.disable();
     }
   }
 
@@ -66,7 +66,7 @@ export class BookEdit implements OnInit {
       autor: this.autor.value!.trim(),
       ano_lancamento: Number(this.ano.value!),
       genero: this.genero.value!.trim(),
-      isbn: Number(this.isbn.value!.trim()),
+      isbn: this.isbn.value!.trim(),
     };
 
     if (this.router.url.includes('/add')) {
@@ -85,6 +85,7 @@ export class BookEdit implements OnInit {
     this.bookService.adicionarLivro(dados).subscribe({
       next: (res: any) => {
         if (res.messages?.errors?.length > 0) {
+          console.log(res)
           this.successText = ''
           this.errorText = res.messages.errors[0].message;
           return
@@ -93,6 +94,7 @@ export class BookEdit implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err: any) => {
+        console.log(err)
         let mensagem = 'Erro inesperado ao adicionar livro.';
 
         if (err.forced && err.errors?.[0]?.message) {
