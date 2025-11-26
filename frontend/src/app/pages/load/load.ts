@@ -15,6 +15,6 @@ export class Load implements OnInit {
 
     setTimeout(() => {
       this.router.navigate(["home"])
-    }, 1000)
+    }, 0)
   }
 }
