@@ -97,15 +97,7 @@ export class BookEdit implements OnInit {
         console.log(err)
         let mensagem = 'Erro inesperado ao adicionar livro.';
 
-        if (err.forced && err.errors?.[0]?.message) {
-          mensagem = err.errors[0].message;
-        } else if (err.error?.messages?.errors?.[0]?.message) {
-          mensagem = err.error.messages.errors[0].message;
-        } else if (err.error?.message) {
-          mensagem = err.error.message;
-        }
-
-        this.setError(mensagem);
+        this.setError(err.error.errors[0].message);
       }
     });
   }
