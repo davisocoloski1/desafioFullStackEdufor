@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Book } from '../../../services/book';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { Router } from '@angular/router';
+import { BookModel } from '../../../models/book-model';
 
 @Component({
   selector: 'app-bar-grapich',
@@ -11,10 +11,9 @@ import { Router } from '@angular/router';
   templateUrl: './bar-graphic.html',
   styleUrl: './bar-graphic.scss',
 })
-export class BarGrapich implements OnInit {
+export class BarGrapich implements OnChanges {
 
-  bookService = inject(Book);
-  router = inject(Router);
+  @Input() books: BookModel[] = [];
 
   showChart = false; // <-- flag para controlar exibição
 
@@ -39,19 +38,13 @@ export class BarGrapich implements OnInit {
 
   barChartType: 'bar' = 'bar';
 
-  ngOnInit(): void {
-    if (this.router.url === '/users/books') {
-      this.bookService.exibirLivros().subscribe((res: any) => {
-        this.processChartData(res.data);
-      });
-    } else {
-      this.bookService.exibirPublicos().subscribe((res: any) => {
-        this.processChartData(res.data);
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['books'] && this.books) {
+      this.processChartData(this.books);
     }
   }
 
-  private processChartData(data: any[]) {
+  private processChartData(data: BookModel[]) {
     const yearsCount: Record<number, number> = {};
 
     data.forEach((book: any) => {

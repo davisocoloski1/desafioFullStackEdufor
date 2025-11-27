@@ -46,7 +46,11 @@ export class Home implements OnInit {
   
   deletarLivro(id: number) {
     this.bookService.deletarLivro(id).subscribe({
-      next: (res: any) => console.log(res),
+      next: (res: any) => {
+        console.log(res)
+        this.warnText = 'Livro deletado.'
+        this.exibirLivros()
+      },
       error: (err: any) => console.log(err.error)
     })
   }

@@ -12,9 +12,6 @@ export class Load implements OnInit {
 
   ngOnInit(): void {
     localStorage.removeItem('token')
-
-    setTimeout(() => {
-      this.router.navigate(["home"])
-    }, 0)
+    this.router.navigate(["home"])
   }
 }

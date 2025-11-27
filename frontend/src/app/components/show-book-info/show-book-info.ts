@@ -43,9 +43,6 @@ export class ShowBookInfo implements OnInit {
 
   deletarLivro() {
     this.delete.emit(this.book.id);
-    setTimeout(() => {
-      window.location.reload()
-    }, 1000)
   }
 
   editarLivro() {

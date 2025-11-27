@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Book } from '../../../services/book';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Router } from '@angular/router';
+import { BookModel } from '../../../models/book-model';
 
 @Component({
   selector: 'app-pizza-grapich',
@@ -11,9 +11,8 @@ import { Router } from '@angular/router';
   templateUrl: './pizza-grapich.html',
   styleUrl: './pizza-grapich.scss',
 })
-export class PizzaGrapich implements OnInit {
-  bookService = inject(Book)
-  router = inject(Router)
+export class PizzaGrapich implements OnChanges {
+  @Input() books: BookModel[] = [];
 
   pieChartType: ChartType = 'pie';
 
@@ -22,42 +21,22 @@ export class PizzaGrapich implements OnInit {
     datasets: [{ data: [] }]
   };
 
-  ngOnInit(): void {
-    if (this.router.url === '/users/books') {
-      this.bookService.exibirLivros().subscribe((res: any) => {
-        const books: {
-          genero: string;
-        }[] = res.data
-  
-        const genresCount: Record<string, number> = {};
-  
-        books.forEach((book) => {
-          genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
-        });
-  
-        this.pieData = {
-          labels: Object.keys(genresCount),
-          datasets: [{ data: Object.values(genresCount) }]
-        };
-      });
-    } else {
-        this.bookService.exibirPublicos().subscribe((res: any) => {
-          const books: {
-            genero: string;
-          }[] = res.data
-    
-          const genresCount: Record<string, number> = {};
-    
-          books.forEach((book) => {
-            genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
-          });
-    
-          this.pieData = {
-            labels: Object.keys(genresCount),
-            datasets: [{ data: Object.values(genresCount) }]
-          };
-        });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['books'] && this.books) {
+      this.updateChartData();
     }
+  }
 
+  private updateChartData(): void {
+    const genresCount: Record<string, number> = {};
+
+    this.books.forEach((book) => {
+      genresCount[book.genero] = (genresCount[book.genero] || 0) + 1;
+    });
+
+    this.pieData = {
+      labels: Object.keys(genresCount),
+      datasets: [{ data: Object.values(genresCount) }]
+    };
   }
 }

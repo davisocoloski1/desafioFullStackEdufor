@@ -34,10 +34,12 @@ export class UserBooks implements OnInit {
       next: (res: any) => {
         console.log(res)
         this.warnText = 'Livro deletado.'
-        
-        setTimeout(() => {
-          window.location.reload()
-        }, 3000)
+        this.bookService.exibirLivros().subscribe({
+          next: (res: any) => {
+            this.books = res.data
+            console.log(this.books)
+          }
+        })
       },
       error: (err: any) => console.log(err.error)
     })
